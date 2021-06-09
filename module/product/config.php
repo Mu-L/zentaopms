@@ -2,11 +2,11 @@
 $config->product = new stdclass();
 $config->product->orderBy = 'isClosed,order_desc';
 
-$config->product->customBatchEditFields = 'line,PO,QD,RD,status,type,desc';
+$config->product->customBatchEditFields = 'PO,QD,RD,status,type,desc,acl';
 
 $config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
-$config->product->custom->batchEditFields = 'line,PO,QD,RD,status';
+$config->product->custom->batchEditFields = 'PO,QD,RD,status,type,acl';
 
 $config->product->list = new stdclass();
 $config->product->list->exportFields = 'id,name,line,activeStories,changedStories,draftStories,closedStories,plans,releases,bugs,unResolvedBugs,assignToNullBugs';
@@ -85,6 +85,11 @@ $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
 $config->product->create->requiredFields = 'name';
 $config->product->edit->requiredFields   = 'name';
+if($config->systemMode == 'new')
+{
+    $config->product->create->requiredFields .= ',program';
+    $config->product->edit->requiredFields   .= ',program';
+}
 
 $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');

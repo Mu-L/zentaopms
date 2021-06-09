@@ -9,7 +9,7 @@
  * @version  $Id: vi.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link  http://www.zentao.net
  */
-$lang->release->common           = 'Phát hành';
+$lang->release->common           = 'Product Release';
 $lang->release->create           = "Tạo phát hành";
 $lang->release->edit             = "Sửa phát hành";
 $lang->release->linkStory        = "Liên kết câu chuyện";
@@ -35,6 +35,7 @@ $lang->release->basicInfo = 'Thông tin cơ bản';
 $lang->release->id            = 'ID';
 $lang->release->product       = $lang->productCommon;
 $lang->release->branch        = 'Platform/Branch';
+$lang->release->project       = 'Project';
 $lang->release->build         = 'Bản dựng';
 $lang->release->name          = 'Tên';
 $lang->release->marker        = 'Cột mốc';

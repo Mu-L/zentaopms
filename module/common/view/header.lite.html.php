@@ -70,4 +70,9 @@ $extHookFiles = glob($extHookRule);
 if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 </head>
-<body>
+<?php $singleClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';?>
+<?php if($this->moduleName == 'index' && $this->methodName == 'index' && $this->cookie->hideMenu): ?>
+<body class='menu-hide <?php echo $singleClass;?>'>
+<?php else: ?>
+<body class='<?php echo $singleClass;?>'>
+<?php endif; ?>

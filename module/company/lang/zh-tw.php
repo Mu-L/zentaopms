@@ -11,6 +11,7 @@
  */
 $lang->company->common   = '組織視圖';
 $lang->company->index    = "組織視圖首頁";
+$lang->company->create   = "添加公司";
 $lang->company->edit     = "編輯公司";
 $lang->company->view     = "公司信息";
 $lang->company->browse   = "用戶列表";
@@ -27,9 +28,10 @@ $lang->company->backyard = '內網';
 $lang->company->guest    = '匿名登錄';
 $lang->company->admins   = '管理員';
 
-$lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->projectCommon;
-$lang->company->user    = '用戶';
+$lang->company->product   = $lang->productCommon;
+$lang->company->project   = '項目';
+$lang->company->execution = $lang->executionCommon;
+$lang->company->user      = '用戶';
 
 $lang->company->guestOptions[0] = '不允許';
 $lang->company->guestOptions[1] = '允許';

@@ -11,6 +11,7 @@
  */
 $lang->company->common   = '组织视图';
 $lang->company->index    = "组织视图首页";
+$lang->company->create   = "添加公司";
 $lang->company->edit     = "编辑公司";
 $lang->company->view     = "公司信息";
 $lang->company->browse   = "用户列表";
@@ -27,9 +28,10 @@ $lang->company->backyard = '内网';
 $lang->company->guest    = '匿名登录';
 $lang->company->admins   = '管理员';
 
-$lang->company->product = $lang->productCommon;
-$lang->company->project = $lang->projectCommon;
-$lang->company->user    = '用户';
+$lang->company->product   = $lang->productCommon;
+$lang->company->project   = '项目';
+$lang->company->execution = $lang->executionCommon;
+$lang->company->user      = '用户';
 
 $lang->company->guestOptions[0] = '不允许';
 $lang->company->guestOptions[1] = '允许';

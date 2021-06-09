@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '靜態友好方式';
 
 $lang->install->workingList['full']      = '完整研發管理工具';
-$lang->install->workingList['onlyTest']  = '測試管理工具';
-$lang->install->workingList['onlyStory'] = "需求管理工具";
-$lang->install->workingList['onlyTask']  = '任務管理工具';
 
 $lang->install->errorConnectDB      = '資料庫連接失敗 ';
 $lang->install->errorDBName         = '資料庫名不能含有 “.” ';
@@ -156,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = '受限用戶';
 $lang->install->groupList['LIMITED']['desc'] = '受限用戶分組(只能編輯與自己相關的內容)';
 
 $lang->install->cronList[''] = '監控定時任務';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = '更新燃盡圖';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃盡圖';
 $lang->install->cronList['moduleName=report&methodName=remind']         = '每日任務提醒';
 $lang->install->cronList['moduleName=svn&methodName=run']               = '同步SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = '同步GIT';

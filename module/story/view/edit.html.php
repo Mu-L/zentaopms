@@ -14,6 +14,8 @@
 <?php js::set('oldProductID', $story->product);?>
 <?php js::set('parentStory', !empty($story->children));?>
 <?php js::set('moveChildrenTips', $lang->story->moveChildrenTips);?>
+<?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('reviewedReviewer', $reviewedReviewer);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -54,10 +56,10 @@
             </div>
           </div>
           <div class='actions form-actions text-center'>
-            <?php 
+            <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton($lang->save);
-            echo html::backButton();
+            if(!isonlybody()) echo html::a($app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), $lang->goback, '', 'class="btn btn-wide"');
             ?>
           </div>
           <hr class='small' />
@@ -117,7 +119,7 @@
                   <div class='input-group' id='planIdBox'>
                   <?php $multiple = ($this->session->currentProductType != 'normal' and empty($story->branch)) ? true : false;?>
                   <?php echo html::select($multiple ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen'" . ($multiple ? ' multiple' : ''));
-                  if(count($plans) == 1) 
+                  if(count($plans) == 1)
                   {
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('productplan', 'create', "productID=$story->product&branch=$story->branch", '', true), $lang->productplan->create, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
@@ -145,7 +147,7 @@
                   <?php echo html::hidden('status', $story->status);?>
                 </td>
               </tr>
-              <?php if($story->status != 'draft'):?>
+              <?php if($story->status != 'draft' and $story->type == 'story'):?>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
@@ -165,6 +167,10 @@
                 </td>
               </tr>
               <?php endif;?>
+              <tr>
+                <th><?php echo $lang->story->category;?></th>
+                <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
+              </tr>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
                 <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
@@ -199,10 +205,10 @@
                 <th><?php echo $lang->story->assignedTo;?></th>
                 <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
-              <?php if($story->reviewedBy):?>
+              <?php if($isShowReviewer):?>
               <tr>
-                <th><?php echo $lang->story->reviewedBy;?></th>
-                <td><?php echo html::select('reviewedBy[]', $users, str_replace(' ', '', $story->reviewedBy), 'class="form-control chosen" multiple');?></td>
+                <th><?php echo $lang->story->reviewers;?></th>
+                <td><?php echo html::select('reviewer[]', $users, $reviewers, 'class="form-control chosen" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>
@@ -217,7 +223,7 @@
               <?php endif;?>
             </table>
           </div>
-    
+
           <?php $this->printExtendFields($story, 'div', 'position=right');?>
 
           <div class='detail'>
@@ -229,34 +235,6 @@
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
               </tr>
               <?php endif;?>
-              <tr>
-                <th class='linkThWidth'><?php echo $lang->story->linkStories;?></th>
-                <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
-              </tr>
-              <tr>
-                <th></th>
-                <td>
-                  <ul class='list-unstyled'>
-                    <?php
-                    if($story->linkStories)
-                    {
-                        $linkStories = explode(',', $story->linkStories);
-                        foreach($linkStories as $linkStoryID)
-                        {
-                            if(isset($story->extraStories[$linkStoryID]))
-                            {
-                                echo "<li><div class='checkbox-primary'>";
-                                echo "<input type='checkbox' checked='checked' name='linkStories[]' value=$linkStoryID />";
-                                echo "<label>#{$linkStoryID} {$story->extraStories[$linkStoryID]}</label>";
-                                echo '</div></li>';
-                            }
-                        }
-                    }
-                    ?>
-                    <span id='linkStoriesBox'></span>
-                  </ul>
-                </td>
-              </tr>
               <?php if($story->status == 'closed'):?>
               <tr class='text-top'>
                 <th><?php echo $lang->story->childStories;?></th>

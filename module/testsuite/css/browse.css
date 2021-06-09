@@ -1,1 +1,6 @@
+<<<<<<< HEAD
 .c-desc {overflow: scroll;}
+=======
+.table td.c-desc div {height: 25px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; float: left; max-width: calc(100% - 20px);}
+.table td.c-desc .more {height: 25px; float: left;}
+>>>>>>> 3fe8523aba4206f083d48c90b406edee6a1e2dae

@@ -796,6 +796,64 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
     });
 }
 
+/**
+ * Adjust menu width.
+ *
+ * @access public
+ * @return void
+ */
+function adjustMenuWidth()
+{
+    var $mainHeader = $('#mainHeader .container');
+    if($mainHeader.length == 0) return false;
+
+    var $navbar = $mainHeader.find('#navbar .nav');
+
+    var mainHeaderWidth = $mainHeader.width() - 10;
+    var headingWidth    = $mainHeader.find('#heading').width() + 30;
+    var navbarWidth     = $navbar.width();
+    var toolbarWidth    = $mainHeader.find('#toolbar').width() + 20;
+
+    if(mainHeaderWidth < headingWidth + navbarWidth + toolbarWidth)
+    {
+        var delta = (headingWidth + navbarWidth + toolbarWidth) - mainHeaderWidth;
+        delta = Math.ceil(delta / $navbar.children('li').length / 2);
+
+        var aTagPadding   = $navbar.find('a:first').css('padding-left').replace('px', '');
+        var dividerMargin = $navbar.find('.divider').css('margin-left').replace('px', '');
+
+        var newPadding = aTagPadding - delta;
+        var newMargin  = dividerMargin - delta - 1;
+        if(newPadding < 0) newPadding = 0;
+        if(newMargin < 0)  newMargin  = 0;
+
+        $navbar.children('li').find('a').css('padding-left', newPadding).css('padding-right', newPadding);
+        $navbar.find('.divider').css('margin-left', newMargin).css('margin-right', newMargin);
+    }
+}
+
+/**
+ * Scroll to selected item in drop menu.
+ *
+ * @param  string $id
+ * @access public
+ * @return void
+ */
+function scrollToSelected(id)
+{
+    if(typeof(id) == 'undefined') id = '#dropMenu .table-col .list-group'
+
+    $id = $(id);
+    $selected = $id.find('.selected');
+
+    $id.mouseout(function(){$(this).find('.active').removeClass('active')});
+    if($selected.length > 0)
+    {
+        var offsetHeight = 75;
+        $id.scrollTop($selected.position().top - offsetHeight);
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

@@ -2,20 +2,17 @@
 $lang->repo->common          = '代碼';
 $lang->repo->browse          = '瀏覽';
 $lang->repo->viewRevision    = '查看修訂';
+$lang->repo->product         = '所屬產品';
+$lang->repo->execution       = '所屬' . $lang->execution->common;
 $lang->repo->create          = '創建';
-$lang->repo->createAction    = '創建版本庫';
 $lang->repo->maintain        = '版本庫列表';
 $lang->repo->edit            = '編輯';
-$lang->repo->editAction      = '編輯版本庫';
 $lang->repo->delete          = '刪除版本庫';
 $lang->repo->showSyncCommit  = '顯示同步進度';
 $lang->repo->ajaxSyncCommit  = '介面：AJAX同步註釋';
 $lang->repo->setRules        = '指令配置';
 $lang->repo->download        = '下載';
 $lang->repo->downloadDiff    = '下載Diff';
-$lang->repo->diffAction      = '版本對比';
-$lang->repo->revisionAction  = '版本詳情';
-$lang->repo->blameAction     = '版本追溯';
 $lang->repo->addBug          = '添加評審';
 $lang->repo->editBug         = '編輯評審';
 $lang->repo->deleteBug       = '刪除評審';
@@ -23,13 +20,20 @@ $lang->repo->addComment      = '添加備註';
 $lang->repo->editComment     = '編輯備註';
 $lang->repo->deleteComment   = '刪除備註';
 
+$lang->repo->browseAction    = '瀏覽版本庫';
+$lang->repo->createAction    = '創建版本庫';
+$lang->repo->editAction      = '編輯版本庫';
+$lang->repo->diffAction      = '版本對比';
+$lang->repo->downloadAction  = '下載代碼庫檔案';
+$lang->repo->revisionAction  = '版本詳情';
+$lang->repo->blameAction     = '版本追溯';
+$lang->repo->reviewAction    = '評審列表';
+
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加評論';
 
-$lang->repo->product  = $lang->productCommon;
 $lang->repo->module   = '模組';
-$lang->repo->project  = $lang->projectCommon;
 $lang->repo->type     = '類型';
 $lang->repo->assign   = '指派';
 $lang->repo->title    = '標題';
@@ -121,6 +125,14 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Gitlab']     = 'Gitlab';
+
+$lang->repo->gitlabHost    = 'Gitlab 地址';
+$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabProject = '項目';
+
+$lang->repo->placeholder = new stdclass;
+$lang->repo->placeholder->gitlabHost = '請填寫gitlab訪問地址';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 請稍等...';
@@ -159,6 +171,7 @@ $lang->repo->error->noPriv        = '程序沒有權限切換到目錄 %s';
 $lang->repo->error->output        = "執行命令：%s\n錯誤結果(%s)： %s\n";
 $lang->repo->error->clientVersion = "客戶端版本過低，請升級或更換SVN客戶端";
 $lang->repo->error->encoding      = "編碼可能錯誤，請更換編碼重試。";
+$lang->repo->error->deleted       = "刪除版本庫失敗，當前版本庫有提交記錄與設計關聯";
 $lang->repo->error->clientPath    = "客戶端安裝目錄不能有空格！";
 
 $lang->repo->syncTips      = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';

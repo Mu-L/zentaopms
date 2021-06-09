@@ -11,6 +11,8 @@
  */
 $lang->user->common           = 'User';
 $lang->user->id               = 'ID';
+$lang->user->inside           = 'Inside Members';
+$lang->user->outside          = 'Outside Members';
 $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
@@ -49,6 +51,12 @@ $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 $lang->user->score            = 'Score';
+$lang->user->name             = 'Name';
+$lang->user->type             = 'User Type';
+$lang->user->cropAvatar       = 'Crop Avatar';
+$lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
+$lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
+$lang->user->captcha          = 'Captcha';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -76,6 +84,7 @@ $lang->user->asGuest       = "Guest";
 $lang->user->goback        = "Back";
 $lang->user->deleted       = '(Deleted)';
 $lang->user->search        = 'Search';
+$lang->user->else          = 'Else';
 
 $lang->user->saveTemplate          = 'Save as Template';
 $lang->user->setPublic             = 'Set as Public Template';
@@ -86,17 +95,20 @@ $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
 $lang->user->tplContentNotEmpty    = 'The template content cannot be empty!';
 
-$lang->user->profile     = 'Profile';
-$lang->user->project     = $lang->projectCommon . 's';
-$lang->user->task        = 'Tasks';
-$lang->user->bug         = 'Bugs';
-$lang->user->test        = 'Test';
-$lang->user->testTask    = 'Requests';
-$lang->user->testCase    = 'Cases';
-$lang->user->schedule    = 'Schedule';
-$lang->user->todo        = 'Todos';
-$lang->user->story       = 'Stories';
-$lang->user->dynamic     = 'Dynamics';
+$lang->user->profile   = 'Profile';
+$lang->user->project   = $lang->executionCommon . 's';
+$lang->user->execution = $lang->execution->common;
+$lang->user->task      = 'Tasks';
+$lang->user->bug       = 'Bugs';
+$lang->user->test      = 'Test';
+$lang->user->testTask  = 'Requests';
+$lang->user->testCase  = 'Cases';
+$lang->user->issue     = 'Issue';
+$lang->user->risk      = 'Risk';
+$lang->user->schedule  = 'Schedule';
+$lang->user->todo      = 'Todos';
+$lang->user->story     = 'Stories';
+$lang->user->dynamic   = 'Dynamics';
 
 $lang->user->openedBy    = 'CreatedBy%s';
 $lang->user->assignedTo  = 'AssignedTo%s';
@@ -117,6 +129,7 @@ $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
 $lang->user->weakPassword = "Your password does not meet the requirements.";
 $lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
+$lang->user->errorCaptcha = "Captcha Error";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -135,6 +148,9 @@ $lang->user->genderList['f'] = 'Female';
 $lang->user->thirdPerson['m'] = 'Him';
 $lang->user->thirdPerson['f'] = 'Her';
 
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>";
@@ -142,11 +158,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>"
 $lang->user->statusList['active'] = 'Active';
 $lang->user->statusList['delete'] = 'Deleted';
 
-$lang->user->personalData['createdTodo']  = 'Todos Created';
-$lang->user->personalData['createdStory'] = 'Stories Created';
-$lang->user->personalData['finishedTask'] = 'Tasks Finished';
-$lang->user->personalData['resolvedBug']  = 'Bugs Resolved';
-$lang->user->personalData['createdCase']  = 'Cases Created';
+$lang->user->personalData['createdTodos']        = 'Todos Created';
+$lang->user->personalData['createdRequirements'] = "Requirements Created";
+$lang->user->personalData['createdStories']      = "Stories Created";
+$lang->user->personalData['finishedTasks']       = 'Tasks Finished';
+$lang->user->personalData['createdBugs']         = 'Bugs Created';
+$lang->user->personalData['resolvedBugs']        = 'Bugs Resolved';
+$lang->user->personalData['createdCases']        = 'Cases Created';
+$lang->user->personalData['createdRisks']        = 'Risks Created';
+$lang->user->personalData['resolvedRisks']       = 'Risks Resolved';
+$lang->user->personalData['createdIssues']       = 'Issues Created';
+$lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
+$lang->user->personalData['createdDocs']         = 'Docs Created';
 
 $lang->user->keepLogin['on']      = 'Keep Login';
 $lang->user->loginWithDemoUser    = 'Login as Demo User:';
@@ -166,7 +189,7 @@ $lang->user->placeholder->password1 = '>= 6 characters';
 $lang->user->placeholder->role      = "Role is related to content and user listing order.";
 $lang->user->placeholder->group     = "Group is related to user privileges.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
-$lang->user->placeholder->verify    = 'Please enter your login password.';
+$lang->user->placeholder->verify    = 'Please enter your ZenTao login password to verify..';
 
 $lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
@@ -183,6 +206,8 @@ $lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s]
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
+$lang->user->error->companyEmpty     = "Company name must be not empty.";
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -192,6 +217,9 @@ $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
 $lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+
+$lang->user->executionTypeList['stage']  = 'Stage';
+$lang->user->executionTypeList['sprint'] = $lang->iterationCommon;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';
@@ -217,5 +245,5 @@ $lang->user->noticeResetFile = "<h5>Contact the Administrator to reset your pass
     <li>If the file exists, remove it and create it again.</li>
     </ol>";
 $lang->user->notice4Safe = "Warning: Weak password of one click package detected";
-$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
-$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";

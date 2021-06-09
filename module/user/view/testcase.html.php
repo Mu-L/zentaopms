@@ -17,19 +17,18 @@
     <ul class='nav nav-default'>
       <?php
       $that = zget($lang->user->thirdPerson, $user->gender);
-      echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "userID={$user->id}"),  sprintf($lang->user->testTask2Him, $that)) . "</li>";
-    
+
       $active = $type == 'case2Him' ? 'active' : '';
-      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
       $active = $type == 'caseByHim' ? 'active' : '';
-      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=caseByHim"),  sprintf($lang->user->caseByHim, $that)) . "</li>";
+      echo "<li class='$active'>" . html::a($this->createLink('user', 'testcase', "userID={$user->id}&type=caseByHim"), sprintf($lang->user->caseByHim, $that)) . "</li>";
       ?>
     </ul>
   </nav>
 
   <div class='main-table'>
     <table class='table has-sort-head'>
-      <?php 
+      <?php
       $vars = "userID={$user->id}&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
       ?>
@@ -50,9 +49,9 @@
         <?php foreach($cases as $case):?>
         <?php $caseID = $type == 'case2Him' ? $case->case : $case->id?>
         <tr class='text-left'>
-          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), sprintf('%03d', $caseID));?></td>
+          <td><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', false, '', true), sprintf('%03d', $caseID));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
-          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version"), $case->title);?></td>
+          <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "testcaseID=$caseID&version=$case->version", '', false, '', true), $case->title);?></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
@@ -61,7 +60,7 @@
           <td class='<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
         </tr>
         <?php endforeach;?>
-      </tbody> 
+      </tbody>
     </table>
     <?php if($cases):?>
     <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>

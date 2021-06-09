@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Volles Development Management';
-$lang->install->workingList['onlyTest']  = 'Nur Test Management';
-$lang->install->workingList['onlyStory'] = 'Nur Story Management';
-$lang->install->workingList['onlyTask']  = 'Nur Task Management';
 
 $lang->install->errorConnectDB      = 'Verbindung zur Datenbank fehlgeschlagen. ';
 $lang->install->errorDBName         = 'Datenbankname darf keinen Punkt enthalten';
@@ -156,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = 'Eingeschränkte Benutzer';
 $lang->install->groupList['LIMITED']['desc'] = 'Können nur Inhalte bearbeiten, die sie selbst betreffen';
 
 $lang->install->cronList[''] = 'Cron Anzeigen';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Update Burndown Chart';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Täglicher Aufgaben reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Synchronisiere SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Synchronisiere GIT';

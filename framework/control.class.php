@@ -21,11 +21,11 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
-     * Check requiredFields and set exportFields for workflow. 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
-     * @param  string $appName 
+     * Check requiredFields and set exportFields for workflow.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $appName
      * @access public
      * @return void
      */
@@ -33,7 +33,9 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setConcept();
+        $this->app->setOpenApp();
+
+        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')) $this->setPreference();
 
         if(!isset($this->config->bizVersion)) return false;
 
@@ -77,21 +79,21 @@ class control extends baseControl
     }
 
     /**
-     * Go to concept setting page if concept not setted.
-     * 
+     * Go to preference setting page if preference not setted.
+     *
      * @access public
      * @return void
      */
-    public function setConcept()
+    public function setPreference()
     {
-        if(empty($this->app->user->admin)) return true;
+        if(empty($this->app->user->account)) return true;
         if($this->app->getModuleName() == 'user' and strpos("login,logout", $this->app->getMethodName()) !== false) return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
+        if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
 
-        if($this->app->getModuleName() == 'custom' and $this->app->getMethodName() == 'flow') return true;
-        if(!isset($this->config->conceptSetted)) 
+        if(!isset($this->config->preferenceSetted))
         {
-            $this->locate(helper::createLink('custom', 'flow'));
+            $this->locate(helper::createLink('my', 'preference'));
         }
     }
 
@@ -208,7 +210,7 @@ class control extends baseControl
         chdir(dirname($viewFile));
 
         /**
-         * 使用extract安定ob方法渲染$viewFile里面的代码。
+         * 使用extract和ob方法渲染$viewFile里面的代码。
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract((array)$this->view);
@@ -293,7 +295,7 @@ class control extends baseControl
 
     /**
      * Check require with flow field when post data.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -302,6 +304,7 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
         if(empty($_POST)) return false;
 
+        $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
         $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
         $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
         $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
@@ -330,10 +333,29 @@ class control extends baseControl
                 }
                 elseif($rule->type == 'system' and isset($_POST[$field->field]))
                 {
-                    $checkFunc = 'check' . $rule->rule;
-                    if(validater::$checkFunc($_POST[$field->field]) === false)
+                    $pass = true;
+                    if($rule->rule == 'unique')
+                    {
+                        if(!empty($_POST[$field->field]))
+                        {
+                            $sqlClass = new sql();
+                            $sql      = "SELECT COUNT(*) AS count FROM $flow->table WHERE `$field->field` = " . $sqlClass->quote(fixer::input('post')->get($field->field));
+                            if(isset($_POST['id'])) $sql .= ' AND `id` != ' . (int)$_POST['id'];
+
+                            $row = $this->dbh->query($sql)->fetch();
+                            if($row->count != 0) $pass = false;
+                        }
+                    }
+                    else
+                    {
+                        $checkFunc = 'check' . $rule->rule;
+                        if(validater::$checkFunc($_POST[$field->field]) === false) $pass = false;
+                    }
+
+                    if(!$pass)
                     {
                         $error = zget($this->lang->error, $rule->rule, '');
+                        if($rule->rule == 'unique') $error = sprintf($error, $field->name, $_POST[$field->field]);
                         if($error) $error = sprintf($error, $field->name);
                         if(empty($error)) $error = sprintf($this->lang->error->reg, $field->name, $rule->rule);
 

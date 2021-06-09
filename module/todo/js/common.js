@@ -25,20 +25,12 @@ function loadList(type, id)
 
     var param = 'userID=' + userID;
     if(id) param += '&id=' + id;
-    if(type == 'bug')
+    if(moduleList.indexOf(type) !== -1)
     {
-        link = createLink('bug', 'ajaxGetUserBugs', param);
-    }
-    else if(type == 'task')
-    {
-        link = createLink('task', 'ajaxGetUserTasks', param);
-    }
-    else if(type == 'story')
-    {
-        link = createLink('story', 'ajaxGetUserStorys', param);
+        link = createLink(type, objectsMethod[type], param);
     }
 
-    if(type == 'bug' || type == 'task' || type == 'story')
+    if(moduleList.indexOf(type) !== -1)
     {
         $.get(link, function(data, status)
         {

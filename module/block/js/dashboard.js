@@ -1,7 +1,7 @@
 /**
  * Delete block.
- * 
- * @param  int    $index 
+ *
+ * @param  int    $index
  * @access public
  * @return void
  */
@@ -26,8 +26,8 @@ function deleteBlock(index)
 
 /**
  * Sort blocks.
- * 
- * @param  array $orders  format is {'blockid' : 1, 'block1' : 2} 
+ *
+ * @param  array $orders  format is {'blockid' : 1, 'block1' : 2}
  * @param  function $callback
  * @access public
  * @return void
@@ -53,6 +53,14 @@ function resizeBlock(blockID, width, callback)
     });
 }
 
+/**
+ * refreshBlock
+ *
+ * @param  object   $panel
+ * @param  function afterRefresh
+ * @access public
+ * @return void
+ */
 function refreshBlock($panel, afterRefresh)
 {
     var url = $panel.data('url');
@@ -79,6 +87,8 @@ function refreshBlock($panel, afterRefresh)
             });
         }
         $panel.find('.tablesorter').sortTable();
+        $panel.find('.chosen').chosen();
+        $panel.children('.table-header-fixed').remove();
         initTableHeader($panel);
         $(".sparkline").sparkline();
     }).fail(function()
@@ -122,7 +132,7 @@ function initTableHeader($wrapper)
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
-        
+
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
         if(!isFixed)
@@ -195,7 +205,7 @@ function checkRefreshProgress($dashboard, doneCallback)
  * @param  index $index
  * @access public
  * @return void
- */ 
+ */
 function hiddenBlock(index)
 {
     $.getJSON(createLink('block', 'delete', 'index=' + index + '&module=' + module + '&type=hidden'), function(data)
@@ -210,6 +220,12 @@ function hiddenBlock(index)
     })
 }
 
+/**
+ * Block initialization.
+ *
+ * @access public
+ * @return void
+ */
 $(function()
 {
     initTableHeader();
@@ -222,7 +238,7 @@ $(function()
     $('#dashboard').sortable(
     {
         selector: '.panel',
-        trigger: '.panel-heading,.panel-move-handler',
+        trigger: '.panel-heading:not(.not-move-handler),.panel-move-handler',
         containerSelector: '.col-main,.col-side',
         start: function()
         {
@@ -241,7 +257,7 @@ $(function()
             {
                 resizeBlock(e.element.data('id'), isSideCol ? 4 : 8);
             });
-            
+
             e.element.toggleClass('block-sm', isSideCol);
         }
     }).on('click', '.refresh-panel', function()
@@ -249,3 +265,28 @@ $(function()
         refreshBlock($(this).closest('.panel'));
     });
 });
+
+/**
+ * Reload roadmap.
+ *
+ * @param  int    productID
+ * @param  int    roadMapID
+ * @access public
+ * @return void
+ */
+function reloadRoadmap(productID, roadMapID)
+{
+    $.ajax(
+    {
+        url: createLink('block', 'printScrumroadmapBlock', 'productID=' + productID + '&roadMapID=' + roadMapID),
+        dataType: "html",
+        async: false,
+        data: {productID: productID, roadMapID: roadMapID},
+        type: 'post',
+        success: function(data)
+        {
+            $("#roadMap" + roadMapID).html(data);
+            $("#" + roadMapID).chosen();
+        }
+    })
+}

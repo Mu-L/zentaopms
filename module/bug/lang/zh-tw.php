@@ -14,12 +14,13 @@ $lang->bug->common           = 'Bug';
 $lang->bug->id               = 'Bug編號';
 $lang->bug->product          = '所屬' . $lang->productCommon;
 $lang->bug->branch           = '分支/平台';
-$lang->bug->productplan      = '所屬計劃';
+$lang->bug->productplan      = '所屬' . '計劃';
 $lang->bug->module           = '所屬模組';
 $lang->bug->moduleAB         = '模組';
-$lang->bug->project          = '所屬' . $lang->projectCommon;
-$lang->bug->story            = "相關{$lang->storyCommon}";
-$lang->bug->storyVersion     = "{$lang->storyCommon}版本";
+$lang->bug->project          = '所屬項目';
+$lang->bug->execution        = '所屬' . $lang->executionCommon;
+$lang->bug->story            = "相關需求";
+$lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '標題顏色';
 $lang->bug->task             = '相關任務';
 $lang->bug->title            = 'Bug標題';
@@ -39,7 +40,7 @@ $lang->bug->activatedDate    = '激活日期';
 $lang->bug->confirmed        = '是否確認';
 $lang->bug->confirmedAB      = '確認';
 $lang->bug->toTask           = '轉任務';
-$lang->bug->toStory          = "轉{$lang->storyCommon}";
+$lang->bug->toStory          = "轉{$lang->SRCommon}";
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
 $lang->bug->openedByAB       = '創建者';
@@ -58,7 +59,7 @@ $lang->bug->resolvedBuild    = '解決版本';
 $lang->bug->resolvedDate     = '解決日期';
 $lang->bug->resolvedDateAB   = '解決日期';
 $lang->bug->deadline         = '截止日期';
-$lang->bug->plan             = '所屬計劃';
+$lang->bug->plan             = '所屬' . '計劃';
 $lang->bug->closedBy         = '由誰關閉';
 $lang->bug->closedDate       = '關閉日期';
 $lang->bug->duplicateBug     = '重複ID';
@@ -110,7 +111,7 @@ $lang->bug->exportAction       = '導出Bug';
 $lang->bug->delete             = '刪除';
 $lang->bug->deleteAction       = '刪除Bug';
 $lang->bug->deleted            = '已刪除';
-$lang->bug->confirmStoryChange = "確認{$lang->storyCommon}變動";
+$lang->bug->confirmStoryChange = "確認{$lang->SRCommon}變動";
 $lang->bug->copy               = '複製Bug';
 $lang->bug->search             = '搜索';
 
@@ -129,7 +130,7 @@ $lang->bug->postponedBugs      = '被延期';
 $lang->bug->overdueBugs        = '過期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
-$lang->bug->needConfirm        = "{$lang->storyCommon}變動";
+$lang->bug->needConfirm        = "{$lang->SRCommon}變動";
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解決Bug數';
@@ -159,7 +160,8 @@ $lang->bug->createBuild   = '創建';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . "/{$lang->storyCommon}/任務";
+$lang->bug->legendPRJExecStoryTask      = "項目/" . $lang->executionCommon . "/{$lang->SRCommon}/任務";
+$lang->bug->legendExecStoryTask         = $lang->executionCommon . "/{$lang->SRCommon}/任務";
 $lang->bug->lblTypeAndSeverity          = '類型/嚴重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系統/瀏覽器';
 $lang->bug->legendSteps                 = '重現步驟';
@@ -172,13 +174,14 @@ $lang->bug->legendRelated               = '其他信息';
 $lang->bug->buttonConfirm = '確認';
 
 /* 交互提示。*/
-$lang->bug->summary              = "本頁共 <strong>%s</strong> 個Bug，未解決 <strong>%s</strong>。";
-$lang->bug->confirmChangeProduct = "修改{$lang->productCommon}會導致相應的{$lang->projectCommon}、{$lang->storyCommon}和任務發生變化，確定嗎？";
-$lang->bug->confirmDelete        = '您確認要刪除該Bug嗎？';
-$lang->bug->remindTask           = '該Bug已經轉化為任務，是否更新任務(編號:%s)狀態 ?';
-$lang->bug->skipClose            = 'Bug %s 不是已解決狀態，不能關閉。';
-$lang->bug->projectAccessDenied  = "您無權訪問該Bug所屬的{$lang->projectCommon}！";
-$lang->bug->stepsNotEmpty        = "重現步驟不能為空。";
+$lang->bug->summary               = "本頁共 <strong>%s</strong> 個Bug，未解決 <strong>%s</strong>。";
+$lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}會導致相應的{$lang->executionCommon}、{$lang->SRCommon}和任務發生變化，確定嗎？";
+$lang->bug->confirmDelete         = '您確認要刪除該Bug嗎？';
+$lang->bug->remindTask            = '該Bug已經轉化為任務，是否更新任務(編號:%s)狀態 ?';
+$lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉。';
+$lang->bug->executionAccessDenied = "您無權訪問該Bug所屬的{$lang->executionCommon}！";
+$lang->bug->stepsNotEmpty         = "重現步驟不能為空。";
+$lang->bug->confirmUnlinkBuild    = "更換解决版本將取消與舊版本的關聯，您確定取消該bug與%s的關聯嗎？";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";
@@ -270,7 +273,7 @@ $lang->bug->resolutionList['fixed']      = '已解決';
 $lang->bug->resolutionList['notrepro']   = '無法重現';
 $lang->bug->resolutionList['postponed']  = '延期處理';
 $lang->bug->resolutionList['willnotfix'] = "不予解決";
-$lang->bug->resolutionList['tostory']    = "轉為{$lang->storyCommon}";
+$lang->bug->resolutionList['tostory']    = "轉為{$lang->SRCommon}";
 
 /* 統計報表。*/
 $lang->bug->report = new stdclass();
@@ -278,7 +281,7 @@ $lang->bug->report->common = '報表';
 $lang->bug->report->select = '請選擇報表類型';
 $lang->bug->report->create = '生成報表';
 
-$lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . 'Bug數量';
+$lang->bug->report->charts['bugsPerExecution']      = $lang->executionCommon . 'Bug數量';
 $lang->bug->report->charts['bugsPerBuild']          = '版本Bug數量';
 $lang->bug->report->charts['bugsPerModule']         = '模組Bug數量';
 $lang->bug->report->charts['openedBugsPerDay']      = '每天新增Bug數';
@@ -303,7 +306,7 @@ $lang->bug->report->options->type   = 'pie';
 $lang->bug->report->options->width  = 500;
 $lang->bug->report->options->height = 140;
 
-$lang->bug->report->bugsPerProject        = new stdclass();
+$lang->bug->report->bugsPerExecution      = new stdclass();
 $lang->bug->report->bugsPerBuild          = new stdclass();
 $lang->bug->report->bugsPerModule         = new stdclass();
 $lang->bug->report->openedBugsPerDay      = new stdclass();
@@ -322,7 +325,7 @@ $lang->bug->report->bugsPerAssignedTo     = new stdclass();
 $lang->bug->report->bugLiveDays           = new stdclass();
 $lang->bug->report->bugHistories          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph        = new stdclass();
+$lang->bug->report->bugsPerExecution->graph      = new stdclass();
 $lang->bug->report->bugsPerBuild->graph          = new stdclass();
 $lang->bug->report->bugsPerModule->graph         = new stdclass();
 $lang->bug->report->openedBugsPerDay->graph      = new stdclass();
@@ -341,18 +344,18 @@ $lang->bug->report->bugsPerAssignedTo->graph     = new stdclass();
 $lang->bug->report->bugLiveDays->graph           = new stdclass();
 $lang->bug->report->bugHistories->graph          = new stdclass();
 
-$lang->bug->report->bugsPerProject->graph->xAxisName     = $lang->projectCommon;
-$lang->bug->report->bugsPerBuild->graph->xAxisName       = '版本';
-$lang->bug->report->bugsPerModule->graph->xAxisName      = '模組';
+$lang->bug->report->bugsPerExecution->graph->xAxisName = $lang->executionCommon;
+$lang->bug->report->bugsPerBuild->graph->xAxisName     = '版本';
+$lang->bug->report->bugsPerModule->graph->xAxisName    = '模組';
 
-$lang->bug->report->openedBugsPerDay->type               = 'bar';
-$lang->bug->report->openedBugsPerDay->graph->xAxisName   = '日期';
+$lang->bug->report->openedBugsPerDay->type             = 'bar';
+$lang->bug->report->openedBugsPerDay->graph->xAxisName = '日期';
 
 $lang->bug->report->resolvedBugsPerDay->type             = 'bar';
 $lang->bug->report->resolvedBugsPerDay->graph->xAxisName = '日期';
 
-$lang->bug->report->closedBugsPerDay->type               = 'bar';
-$lang->bug->report->closedBugsPerDay->graph->xAxisName   = '日期';
+$lang->bug->report->closedBugsPerDay->type             = 'bar';
+$lang->bug->report->closedBugsPerDay->graph->xAxisName = '日期';
 
 $lang->bug->report->openedBugsPerUser->graph->xAxisName   = '用戶';
 $lang->bug->report->resolvedBugsPerUser->graph->xAxisName = '用戶';
@@ -371,7 +374,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 /* 操作記錄。*/
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong> ' . $lang->storyCommon . '</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong> ' . $lang->SRCommon . '</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');
@@ -394,8 +397,6 @@ $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
 $lang->bug->featureBar['browse']['toclosed']     = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
-
-
 
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;

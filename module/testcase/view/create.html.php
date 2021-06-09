@@ -70,7 +70,7 @@
             </td>
             <?php endif;?>
           </tr>
-          <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTest'):?>
+          <?php if(strpos(",$showFields,", ',story,') !== false):?>
           <tr>
             <th><?php echo $lang->testcase->lblStory;?></th>
             <td colspan='2'>
@@ -96,7 +96,7 @@
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">
-                    <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+                      <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
                     </ul>
                     <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
                   </div>
@@ -136,7 +136,7 @@
                 <?php endif; ?>
                 <?php endif; // end print pri selector ?>
                 <?php if(!$this->testcase->forceNotReview()):?>
-                    <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
+                <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
                 <?php endif;?>
               </div>
             </td>

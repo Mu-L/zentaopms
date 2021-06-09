@@ -26,28 +26,7 @@ fields:
     format: ""
   - field: template
     note: "模块"
-    range: cmmi,scrum
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: realDuration
-    note: ""
-    range: 0
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: planDuration
-    note: ""
-    range: 1-10000
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: type
-    note: "项目类型"
-    range: waterfall,project
+    range: waterfall,scrum
     prefix: ""
     postfix: ""
     loop: 0
@@ -66,8 +45,78 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: budget
+    note: "项目预算"
+    range: 1-100000:R
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: budgetUnit
+    note: "预算单位"
+    range: yuan,Dollars
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: percent
+    note: "工作占比"
+    range: 1-100:R
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: privway
+    note: "私有的"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: milestone
+    note: "是否里程碑"
+    range: 0,1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: attribute
+    note: "阶段属性"
+    range: story,design,dev,qa,release,review,other
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: output
+    note: "输出文档"
+    range: 1-100:R
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "项目类型"
+    range: waterfall,project
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
   - field: parent
     note: "父级ID"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: path
+    note: "路径"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: grade
+    note: "等级"
     range: 0
     prefix: ""
     postfix: ""
@@ -83,14 +132,7 @@ fields:
   - field: code
     note: "项目代号"
     range: 1-10000
-    prefix: "code"
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: attribute
-    note: "阶段属性"
-    range: story,design,dev,qa,release,review,other
-    prefix: ""
+    prefix: "project"
     postfix: ""
     loop: 0
     format: ""
@@ -128,42 +170,7 @@ fields:
     format: ""
   - field: days
     note: "可用工作日"
-    range: 1-100
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: budget
-    note: "项目预算"
-    range: 1-100000:R
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: budgetUnit
-    note: "预算单位"
-    range: yuan,Dollars
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: percent
-    note: "工作占比"
-    range: 1-100:R
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: milestone
-    note: "是否里程碑"
-    range: 0,1
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: output
-    note: "输出文档"
-    range: 1-100:R
+    range: 1-365:R
     prefix: ""
     postfix: ""
     loop: 0
@@ -177,7 +184,7 @@ fields:
     format: ""
   - field: subStatus
     note: "子状态"
-    range: 0
+    range: 1
     prefix: ""
     postfix: ""
     loop: 0
@@ -213,6 +220,20 @@ fields:
   - field: parentVersion
     note: "父级项目版本"
     range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: realDuration
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: planDuration
+    note: ""
+    range: 1-10000
     prefix: ""
     postfix: ""
     loop: 0
@@ -321,14 +342,14 @@ fields:
     format: ""
   - field: whitelist
     note: "分组白名单"
-    range: 1-10
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: order
     note: "项目排序"
-    range: 10-100:10
+    range: 5-10000:5
     prefix: ""
     postfix: ""
     loop: 0

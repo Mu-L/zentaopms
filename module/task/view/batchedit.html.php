@@ -12,13 +12,16 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('dittoNotice', $this->lang->task->dittoNotice);?>
+<?php
+$dittoNotice = sprintf($this->lang->task->dittoNotice, $lang->executionCommon);
+js::set('dittoNotice', $dittoNotice);
+?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2>
       <?php echo $lang->task->common . $lang->colon . $lang->task->batchEdit;?>
-      <?php if($projectName):?>
-      <small class='text-muted'><?php echo html::icon($lang->icons['project']) . ' ' . $lang->task->project . $lang->colon . ' ' . $projectName;?></small>
+      <?php if($executionName):?>
+      <small class='text-muted'><?php echo $lang->task->execution . $lang->colon . ' ' . $executionName;?></small>
       <?php endif;?>
     </h2>
     <div class='pull-right btn-toolbar'>
@@ -45,7 +48,7 @@
       }
   }
   ?>
-  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "projectID={$projectID}")?>">
+  <form id='batchEditForm' class='main-form' method='post' target='hiddenwin' action="<?php echo inLink('batchEdit', "executionID={$executionID}")?>">
     <div class="table-responsive">
       <table class='table table-form table-fixed with-border'>
         <thead>
@@ -75,38 +78,37 @@
         <tbody>
           <?php foreach($taskIDList as $taskID):?>
           <?php
-          if(!isset($project))
+          if(!isset($execution))
           {
-              $prjInfo = $this->project->getById($tasks[$taskID]->project);
-              $modules = $this->tree->getOptionMenu($tasks[$taskID]->project, $viewType = 'task');
+              $prjInfo = $this->execution->getById($tasks[$taskID]->execution);
+              $modules = $this->tree->getOptionMenu($tasks[$taskID]->execution, $viewType = 'task');
               foreach($modules as $moduleID => $moduleName) $modules[$moduleID] = '/' . $prjInfo->name. $moduleName;
               $modules = array('ditto' => $this->lang->task->ditto) + $modules;
-
-              $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
-              $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
           }
           ?>
           <tr>
             <?php $disableAssignedTo = (isset($teams[$taskID]) and $tasks[$taskID]->assignedTo != $this->app->user->account) ? "disabled='disabled'" : '';?>
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
+            $members      = array('' => '', 'ditto' => $this->lang->task->ditto);
+            $teamAccounts = !empty($executionTeams[$tasks[$taskID]->execution]) ? array_keys($executionTeams[$tasks[$taskID]->execution]) : array();
+            foreach($teamAccounts as $teamAccount) $members[$teamAccount] = $users[$teamAccount];
+            $members['closed'] = 'Closed';
+
             $taskMembers = array();
             if(isset($teams[$taskID]))
             {
                 $teamAccounts = array_keys($teams[$taskID]);
-                foreach($teamAccounts as $teamAccount)
-                {
-                    $taskMembers[$teamAccount] = $members[$teamAccount];
-                }
+                foreach($teamAccounts as $teamAccount) $taskMembers[$teamAccount] = $users[$teamAccount];
             }
             else
             {
-                if(!isset($taskMembers[$tasks[$taskID]->assignedTo]))
-                {
-                    $members = $this->project->getTeamMemberPairs($tasks[$taskID]->project, 'nodeleted');
-                    $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
-                }
                 $taskMembers = $members;
+            }
+
+            if($tasks[$taskID]->assignedTo and !isset($taskMembers[$tasks[$taskID]->assignedTo]))
+            {
+                $taskMembers[$tasks[$taskID]->assignedTo] = $users[$tasks[$taskID]->assignedTo];
             }
             ?>
             <td><?php echo $taskID . html::hidden("taskIDList[$taskID]", $taskID);?></td>
@@ -122,7 +124,7 @@
                 </div>
               </div>
             </td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]",     $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$taskID]", $modules, $tasks[$taskID]->module, "class='form-control chosen'")?></td>
             <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$taskID]", $taskMembers, $tasks[$taskID]->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></td>
             <td><?php echo html::select("types[$taskID]",    $typeList, $tasks[$taskID]->type, "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'status',     "class='hidden'")?>><?php echo html::select("statuses[$taskID]", $statusList, $tasks[$taskID]->status, "class='form-control'");?></td>

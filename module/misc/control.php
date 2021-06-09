@@ -63,12 +63,22 @@ class misc extends control
      * @access public
      * @return void
      */
-    public function checkUpdate($sn)
+    public function checkUpdate($sn = '')
     {
         session_write_close();
-        $link = $this->lang->misc->api . "/updater-isLatest-{$this->config->version}-{$sn}.html?lang=" . str_replace('-', '_', $this->app->getClientLang());
-        $this->view->note = file_get_contents($link);
-        $this->display();
+
+        $website = $this->config->misc->api;
+
+        if(isset($this->config->qcVersion)) $website = $this->config->misc->qucheng;
+        if(isset($this->config->isINT))     $website = $this->config->misc->enApi;
+
+        $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
+        $lang   = str_replace('-', '_', $this->app->getClientLang());
+        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang.html";
+
+        $latestVersionList = common::http($link);
+
+        $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
     }
 
     /**
@@ -208,49 +218,21 @@ class misc extends control
     }
 
     /**
-     * Ajax set unfoldID.
+     * Show captcha and save to session.
      * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $action       add|delete
+     * @param  string $sessionVar 
+     * @param  string $uuid 
      * @access public
      * @return void
      */
-    public function ajaxSetUnfoldID($objectID, $objectType, $action = 'add')
+    public function captcha($sessionVar = 'captcha', $uuid = '')
     {
-        $account = $this->app->user->account;
-        if($objectType == 'project')
-        {
-            $condition   = "owner={$account}&module=project&section=task&key=unfoldTasks";
-            $settingPath = $account . ".project.task.unfoldTasks";
-        }
-        else
-        {
-            $condition   = "owner={$account}&module=product&section=browse&key=unfoldStories";
-            $settingPath = $account . ".product.browse.unfoldStories";
-        }
+        $obLevel = ob_get_level();
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
-        $this->loadModel('setting');
-        $setting     = $this->setting->createDAO($this->setting->parseItemParam($condition), 'select')->fetch();
-        $newUnfoldID = $this->post->newUnfoldID;
-        if(empty($newUnfoldID)) die();
-
-        $newUnfoldID  = json_decode($newUnfoldID);
-        $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
-        foreach($newUnfoldID as $unfoldID)
-        {
-            unset($unfoldIdList[$objectID][$unfoldID]);
-            if($action == 'add') $unfoldIdList[$objectID][$unfoldID] = $unfoldID;
-        }
-
-        if(empty($setting))
-        {
-            $this->setting->setItem($settingPath, json_encode($unfoldIdList));
-        }
-        else
-        {
-            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
-        }
-        die('success');
+        header('Content-Type: image/jpeg');
+        $captcha = $this->app->loadClass('captcha');
+        $this->session->set($sessionVar, $captcha->getPhrase());
+        $captcha->build()->output();
     }
 }

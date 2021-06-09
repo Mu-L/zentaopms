@@ -83,7 +83,7 @@ fields:
   - field: short
     note: "模块简称"
     range: 1-10000
-    prefix: "模块"
+    prefix: "模块简称"
     postfix: ""
     loop: 0
     format: ""

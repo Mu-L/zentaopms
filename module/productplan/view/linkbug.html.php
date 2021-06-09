@@ -42,7 +42,7 @@
             <?php echo html::checkbox('bugs', array($bug->id => sprintf('%03d', $bug->id)));?>
           </td>
           <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-          <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+          <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true, $bug->project), $bug->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
           <td><?php echo zget($users, $bug->assignedTo);?></td>
           <td>
@@ -59,7 +59,7 @@
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->productplan->linkBug, '', 'btn btn-secondary');?>
+        <?php echo html::submitButton($lang->productplan->linkBug, '', 'btn');?>
       </div>
       <?php endif;?>
       <div class="btn-toolbar">

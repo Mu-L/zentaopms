@@ -14,6 +14,8 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noTodo', $lang->todo->noTodo);?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -103,7 +105,7 @@
             <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', 0, "class='form-control'"));?>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr class='cycleConfig hidden'>
           <th><?php echo $lang->todo->deadline;?></th>
           <td><?php echo html::input("config[end]", '', "class='form-control form-date'");?></td>
@@ -111,31 +113,41 @@
         <tr>
           <th><?php echo $lang->todo->type;?></th>
           <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control"');?></td>
-        </tr>  
-        <tr>
-          <th><?php echo $lang->todo->pri;?></th>
-          <td><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->name;?></th>
           <td colspan='2'>
             <div id='nameBox' class='hidden'><?php echo html::input('name', '', "class='form-control'");?></div>
-            <div class='nameBox required'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
+            <div class='input-group title-group required'>
+              <div class='nameBox'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
+              <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
+              <div class="input-group-btn pri-selector" data-type="pri">
+                <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                  <span class="pri-text"><span class="label-pri label-pri-3">3</span></span> &nbsp;<span class="caret"></span>
+                </button>
+                <div class='dropdown-menu pull-right'>
+                  <?php echo html::select('pri', $lang->todo->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>             
+                </div>
+              </div>
+            </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', isset($desc) ? $desc : '', "rows='8' class='form-control'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->status;?></th>
           <td><?php echo html::select('status', $lang->todo->statusList, '', "class='form-control chosen'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->beginAndEnd;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"') . html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');?>
+            <?php
+              echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"');
+              echo html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');
+            ?>
             </div>
           </td>
           <td>
@@ -144,7 +156,7 @@
               <label for='switchTime'><?php echo $lang->todo->lblDisableDate;?></label>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <th><?php echo $lang->todo->private;?></th>
           <td>
@@ -153,7 +165,7 @@
               <label for='private'></label>
             </div>
           </td>
-        </tr>  
+        </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton() . html::backButton();?>

@@ -63,7 +63,7 @@ fields:
     format: ""
   - field: order
     note: "排序"
-    range: 10-100:10
+    range: 10-10000:5
     prefix: ""
     postfix: ""
     loop: 0

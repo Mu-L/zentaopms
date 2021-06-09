@@ -12,22 +12,11 @@
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
-$config->productCommonList['zh-cn'][1] = '项目';
-
 $config->productCommonList['zh-tw'][0] = '產品';
-$config->productCommonList['zh-tw'][1] = '項目';
-
-$config->productCommonList['en'][0] = 'Product';
-$config->productCommonList['en'][1] = 'Project';
-
-$config->productCommonList['de'][0] = 'Produkt';
-$config->productCommonList['de'][1] = 'Projekt';
-
-$config->productCommonList['fr'][0] = 'Product';
-$config->productCommonList['fr'][1] = 'Projet';
-
-$config->productCommonList['vi'][0] = 'Sản phẩm';
-$config->productCommonList['vi'][1] = 'Dự án';
+$config->productCommonList['en'][0]    = 'Product';
+$config->productCommonList['de'][0]    = 'Produkt';
+$config->productCommonList['fr'][0]    = 'Product';
+$config->productCommonList['vi'][0]    = 'Sản phẩm';
 
 /* Project common list. */
 $config->projectCommonList['zh-cn'][0] = '项目';
@@ -42,36 +31,41 @@ $config->projectCommonList['en'][0] = 'Project';
 $config->projectCommonList['en'][1] = 'Iteration';
 $config->projectCommonList['en'][2] = 'Sprint';
 
-$config->projectCommonList['de'][0] = 'Projekt';
+$config->projectCommonList['de'][0] = 'Project';
 $config->projectCommonList['de'][1] = 'Iteration';
 $config->projectCommonList['de'][2] = 'Sprint';
 
-$config->projectCommonList['fr'][0] = 'Projet';
+$config->projectCommonList['fr'][0] = 'Project';
 $config->projectCommonList['fr'][1] = 'Iteration';
 $config->projectCommonList['fr'][2] = 'Sprint';
 
-$config->projectCommonList['vi'][0] = 'Dự án';
-$config->projectCommonList['vi'][1] = 'Lặp lại';
+$config->projectCommonList['vi'][0] = 'Project';
+$config->projectCommonList['vi'][1] = 'Iteration';
 $config->projectCommonList['vi'][2] = 'Sprint';
 
-/* Story common list. */
-$config->storyCommonList['zh-cn'][0] = '需求';
-$config->storyCommonList['zh-cn'][1] = '故事';
+$config->executionCommonList['zh-cn'][0] = '迭代';
+$config->executionCommonList['zh-cn'][1] = '冲刺';
+$config->executionCommonList['zh-cn'][2] = '阶段';
 
-$config->storyCommonList['zh-tw'][0] = '需求';
-$config->storyCommonList['zh-tw'][1] = '故事';
+$config->executionCommonList['zh-tw'][0] = '迭代';
+$config->executionCommonList['zh-tw'][1] = '冲刺';
+$config->executionCommonList['zh-tw'][2] = '階段';
 
-$config->storyCommonList['en'][0] = 'Story';
-$config->storyCommonList['en'][1] = 'Story';
+$config->executionCommonList['en'][0] = 'Iteration';
+$config->executionCommonList['en'][1] = 'Sprint';
+$config->executionCommonList['en'][2] = 'Stage';
 
-$config->storyCommonList['de'][0] = 'Story';
-$config->storyCommonList['de'][1] = 'Story';
+$config->executionCommonList['de'][0] = 'Iteration';
+$config->executionCommonList['de'][1] = 'Sprint';
+$config->executionCommonList['de'][2] = 'Bühne';
 
-$config->storyCommonList['fr'][0] = 'Story';
-$config->storyCommonList['fr'][1] = 'Story';
+$config->executionCommonList['fr'][0] = 'Iteration';
+$config->executionCommonList['fr'][1] = 'Sprint';
+$config->executionCommonList['fr'][2] = 'Phase';
 
-$config->storyCommonList['vi'][0] = 'Câu chuyện';
-$config->storyCommonList['vi'][1] = 'Câu chuyện';
+$config->executionCommonList['vi'][0] = 'Lặp lại';
+$config->executionCommonList['vi'][1] = 'Sprint';
+$config->executionCommonList['vi'][2] = 'Giai đoạn';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
@@ -82,15 +76,15 @@ $config->hourPointCommonList['zh-tw'][0] = '工时';
 $config->hourPointCommonList['zh-tw'][1] = '故事点';
 $config->hourPointCommonList['zh-tw'][2] = '功能点';
 
-$config->hourPointCommonList['en'][0] = 'hour';
+$config->hourPointCommonList['en'][0] = 'Hours';
 $config->hourPointCommonList['en'][1] = 'story point';
 $config->hourPointCommonList['en'][2] = 'function point';
 
-$config->hourPointCommonList['de'][0] = 'hour';
+$config->hourPointCommonList['de'][0] = 'Stunde';
 $config->hourPointCommonList['de'][1] = 'story point';
 $config->hourPointCommonList['de'][2] = 'function point';
 
-$config->hourPointCommonList['fr'][0] = 'hour';
+$config->hourPointCommonList['fr'][0] = 'Heures';
 $config->hourPointCommonList['fr'][1] = 'story point';
 $config->hourPointCommonList['fr'][2] = 'function point';
 
@@ -138,22 +132,31 @@ define('TABLE_USERTPL',       '`' . $config->db->prefix . 'usertpl`');
 
 define('TABLE_PRODUCT',       '`' . $config->db->prefix . 'product`');
 define('TABLE_BRANCH',        '`' . $config->db->prefix . 'branch`');
+define('TABLE_EXPECT',        '`' . $config->db->prefix . 'expect`');
+define('TABLE_STAKEHOLDER',   '`' . $config->db->prefix . 'stakeholder`');
 define('TABLE_STORY',         '`' . $config->db->prefix . 'story`');
 define('TABLE_STORYSPEC',     '`' . $config->db->prefix . 'storyspec`');
+define('TABLE_STORYREVIEW',   '`' . $config->db->prefix . 'storyreview`');
 define('TABLE_STORYSTAGE',    '`' . $config->db->prefix . 'storystage`');
+define('TABLE_STORYESTIMATE', '`' . $config->db->prefix . 'storyestimate`');
 define('TABLE_PRODUCTPLAN',   '`' . $config->db->prefix . 'productplan`');
 define('TABLE_PLANSTORY',     '`' . $config->db->prefix . 'planstory`');
 define('TABLE_RELEASE',       '`' . $config->db->prefix . 'release`');
 
+define('TABLE_PROGRAM',       '`' . $config->db->prefix . 'project`');
 define('TABLE_PROJECT',       '`' . $config->db->prefix . 'project`');
+define('TABLE_EXECUTION',     '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
+define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
+define('TABLE_PROJECTCASE',   '`' . $config->db->prefix . 'projectcase`');
 define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
+define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
 define('TABLE_DOCLIB',        '`' . $config->db->prefix . 'doclib`');
 define('TABLE_DOC',           '`' . $config->db->prefix . 'doc`');
@@ -185,13 +188,19 @@ define('TABLE_RELATION',    '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',   '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',  '`' . $config->db->prefix . 'repobranch`');
-if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
+
+if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
+if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
 
 $config->objectTables['product']     = TABLE_PRODUCT;
-$config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['productplan'] = TABLE_PRODUCTPLAN;
+$config->objectTables['story']       = TABLE_STORY;
 $config->objectTables['release']     = TABLE_RELEASE;
+$config->objectTables['program']     = TABLE_PROJECT;
 $config->objectTables['project']     = TABLE_PROJECT;
+$config->objectTables['execution']   = TABLE_PROJECT;
 $config->objectTables['task']        = TABLE_TASK;
 $config->objectTables['build']       = TABLE_BUILD;
 $config->objectTables['bug']         = TABLE_BUG;
@@ -210,4 +219,11 @@ $config->objectTables['module']      = TABLE_MODULE;
 $config->objectTables['caselib']     = TABLE_TESTSUITE;
 $config->objectTables['entry']       = TABLE_ENTRY;
 $config->objectTables['webhook']     = TABLE_WEBHOOK;
+$config->objectTables['stakeholder'] = TABLE_STAKEHOLDER;
 $config->objectTables['job']         = TABLE_JOB;
+$config->objectTables['team']        = TABLE_TEAM;
+
+/* Program privs.*/
+$config->programPriv = new stdclass();
+$config->programPriv->scrum     = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'qa', 'bug', 'testcase', 'testsuite', 'testreport', 'caselib', 'doc', 'report', 'repo', 'svn', 'git', 'search', 'tree', 'file', 'jenkins', 'job', 'ci', 'branch');
+$config->programPriv->waterfall = $config->programPriv->scrum + array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'milestone', 'design', 'issue', 'risk', 'auditplan', 'nc', 'cm', 'pssp');

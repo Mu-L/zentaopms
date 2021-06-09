@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
@@ -124,16 +126,21 @@
       </div>
       <?php endif;?>
       <div class="row form-group">
-        <label class="col-sm-1"><?php echo $lang->todo->pri;?></label>
-        <div class="col-sm-2">
-          <?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control chosen'");?>
-        </div>
-      </div>
-      <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->name;?></label>
         <div class="col-sm-10">
           <div id='nameBox' class='hidden'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
-          <div class='nameBox required'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
+            <div class='input-group title-group required'>
+              <div class='nameBox'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
+              <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
+              <div class="input-group-btn pri-selector" data-type="pri">
+                <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                  <span class="pri-text"><span class="label-pri label-pri-<?php echo $todo->pri;?>"><?php echo $todo->pri;?></span></span> &nbsp;<span class="caret"></span>
+                </button>
+                <div class='dropdown-menu pull-right'>
+                  <?php echo html::select('pri', $lang->todo->priList, $todo->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>             
+                </div>
+              </div>
+            </div>
         </div>
       </div>
       <div class="row form-group">

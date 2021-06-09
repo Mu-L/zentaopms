@@ -12,10 +12,10 @@
 class job extends control
 {
     /**
-     * Construct 
-     * 
-     * @param  string $moduleName 
-     * @param  string $methodName 
+     * Construct
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
@@ -23,6 +23,7 @@ class job extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('ci')->setMenu();
+        $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
     /**
@@ -46,9 +47,9 @@ class job extends control
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->position[] = $this->lang->ci->job;
         $this->view->position[] = $this->lang->job->browse;
-
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+
         $this->display();
     }
 
@@ -62,18 +63,14 @@ class job extends control
     {
         if($_POST)
         {
-            $this->job->create();
+            $jobID = $this->job->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->app->loadLang('action');
-
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[] = $this->lang->job->create;
-
-        $repoList  = $this->loadModel('repo')->getList();
+        $repoList  = $this->loadModel('repo')->getList($this->projectID);
         $repoPairs = array(0 => '');
         $repoTypes = array();
         foreach($repoList as $repo)
@@ -82,9 +79,13 @@ class job extends control
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
         }
+
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = $this->lang->job->create;
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs();
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
 
         $this->display();
@@ -107,14 +108,10 @@ class job extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]  = $this->lang->job->edit;
-
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
-        $repoList  = $this->repo->getList();
+        $repoList  = $this->repo->getList($this->projectID);
         $repoPairs = array(0 => '', $repo->id => $repo->name);
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)
@@ -124,11 +121,14 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
         }
 
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = $this->lang->job->edit;
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
         $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
         $this->view->job        = $job;
-        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs();
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
         $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
 
@@ -152,9 +152,9 @@ class job extends control
 
     /**
      * View job and compile.
-     * 
-     * @param  int    $jobID 
-     * @param  int    $compileID 
+     *
+     * @param  int    $jobID
+     * @param  int    $compileID
      * @access public
      * @return void
      */
@@ -172,7 +172,7 @@ class job extends control
             $compile = $this->compile->getLastResult($jobID);
         }
 
-        if($compile and $compile->testtask) 
+        if($compile and $compile->testtask)
         {
             $this->app->loadLang('project');
             $taskID = $compile->testtask;

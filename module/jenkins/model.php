@@ -51,15 +51,17 @@ class jenkinsModel extends model
      */
     public function getPairs()
     {
-        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)
+            ->where('deleted')->eq('0')
+            ->orderBy('id')->fetchPairs('id', 'name');
         $jenkins = array('' => '') + $jenkins;
         return $jenkins;
     }
 
     /**
      * Get jenkins tasks.
-     * 
-     * @param  int    $id 
+     *
+     * @param  int    $id
      * @access public
      * @return array
      */
@@ -105,7 +107,8 @@ class jenkinsModel extends model
             ->batchCheck("url", 'URL')
             ->autoCheck()
             ->exec();
-        return !dao::isError();
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertId();
     }
 
     /**

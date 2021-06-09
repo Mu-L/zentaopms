@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
-<?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
+<?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse', 'browseType=byediteddate');?>
 <?php
 $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
 $sessionString .= session_name() . '=' . session_id();
@@ -27,8 +27,10 @@ js::set('docID', $doc->id);
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-primary'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $doc->id;?></span><span class="text" title='<?php echo $doc->title;?>'><?php echo $doc->title;?></span>
       <?php if($doc->deleted):?>
@@ -67,7 +69,7 @@ js::set('docID', $doc->id);
           foreach($versions as $i => $versionTitle)
           {
               $class = $i == $version ? " class='active'" : '';
-              echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i"), $versionTitle) . '</li>';
+              echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i&from={$lang->navGroup->doc}"), $versionTitle) . '</li>';
           }
           ?>
         </ul>
@@ -75,9 +77,11 @@ js::set('docID', $doc->id);
       <?php endif; ?>
     </div>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
     <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
@@ -145,7 +149,7 @@ js::set('docID', $doc->id);
         if(!$doc->deleted)
         {
             common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
-            common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', 'trash', 'hiddenwin');
+            common::printIcon('doc', 'delete', "docID=$doc->id&confirm=no", $doc, 'button', 'trash', 'hiddenwin');
         }
         ?>
       </div>
@@ -182,10 +186,10 @@ js::set('docID', $doc->id);
                 <td><?php echo $doc->productName;?></td>
               </tr>
               <?php endif;?>
-              <?php if($doc->projectName):?>
+              <?php if($doc->executionName):?>
               <tr>
-                <th class='w-80px'><?php echo $lang->doc->project;?></th>
-                <td><?php echo $doc->projectName;?></td>
+                <th class='w-80px'><?php echo $lang->doc->execution;?></th>
+                <td><?php echo $doc->executionName;?></td>
               </tr>
               <?php endif;?>
               <tr>

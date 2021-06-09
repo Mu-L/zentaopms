@@ -164,7 +164,7 @@
               </tr>
               <?php else:?>
               <tr>
-                <th class='w-80px'><?php echo $lang->testcase->product;?></th>
+                <th class='w-85px'><?php echo $lang->testcase->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
@@ -192,7 +192,7 @@
                 </td>
               </tr>
               <?php endif;?>
-              <?php if(!$isLibCase and $config->global->flow != 'onlyTest'):?>
+              <?php if(!$isLibCase):?>
               <tr>
                 <th><?php echo $lang->testcase->story;?></th>
                 <td class='text-left'><div id='storyIdBox'><?php echo html::select('story', $stories, $case->story, 'class="form-control chosen"');?></div>
@@ -270,4 +270,11 @@
     </div>
   </form>
 </div>
+<script>
+$(function()
+{
+    $('#subNavbar [data-id=testcase]').addClass('active');
+    $('#navbar [data-id=testcase]').addClass('active');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

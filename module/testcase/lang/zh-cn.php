@@ -15,8 +15,8 @@ $lang->testcase->module           = '所属模块';
 $lang->testcase->lib              = "所属库";
 $lang->testcase->branch           = "分支/平台";
 $lang->testcase->moduleAB         = '模块';
-$lang->testcase->story            = "相关{$lang->storyCommon}";
-$lang->testcase->storyVersion     = "{$lang->storyCommon}版本";
+$lang->testcase->story            = "相关{$lang->SRCommon}";
+$lang->testcase->storyVersion     = "{$lang->SRCommon}版本";
 $lang->testcase->color            = '标题颜色';
 $lang->testcase->order            = '排序';
 $lang->testcase->title            = '用例标题';
@@ -74,6 +74,8 @@ $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '来自测试单用例';
 $lang->testcase->fromCaselib      = '来自用例库用例';
 $lang->testcase->deleted          = '是否删除';
+$lang->testcase->browseUnits      = '单元测试';
+
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID      = '编号';
@@ -97,7 +99,7 @@ $lang->testcase->batchChangeModule       = "批量修改模块";
 $lang->testcase->confirmLibcaseChange    = "同步用例库用例修改";
 $lang->testcase->ignoreLibcaseChange     = "忽略用例库用例修改";
 $lang->testcase->batchChangeBranch       = "批量修改分支";
-$lang->testcase->groupByStories          = "{$lang->storyCommon}分组";
+$lang->testcase->groupByStories          = "{$lang->SRCommon}分组";
 $lang->testcase->batchDelete             = "批量删除 ";
 $lang->testcase->batchConfirmStoryChange = "批量确认变更";
 $lang->testcase->batchCaseTypeChange     = "批量修改类型";
@@ -114,7 +116,7 @@ $lang->testcase->exportAction            = "导出用例";
 $lang->testcase->reportChart             = '报表统计';
 $lang->testcase->reportAction            = '用例报表统计';
 $lang->testcase->confirmChange           = '确认用例变动';
-$lang->testcase->confirmStoryChange      = "确认{$lang->storyCommon}变动";
+$lang->testcase->confirmStoryChange      = "确认{$lang->SRCommon}变动";
 $lang->testcase->copy                    = '复制用例';
 $lang->testcase->group                   = '分组';
 $lang->testcase->groupName               = '分组名称';
@@ -130,15 +132,15 @@ $lang->testcase->deleteStep   = '删除';
 $lang->testcase->insertBefore = '之前添加';
 $lang->testcase->insertAfter  = '之后添加';
 
-$lang->testcase->assignToMe   = '给我的用例';
+$lang->testcase->assignToMe   = '指派给我的用例';
 $lang->testcase->openedByMe   = '我建的用例';
 $lang->testcase->allCases     = '所有';
 $lang->testcase->allTestcases = '所有用例';
-$lang->testcase->needConfirm  = "{$lang->storyCommon}变动";
+$lang->testcase->needConfirm  = "{$lang->SRCommon}变动";
 $lang->testcase->bySearch     = '搜索';
 $lang->testcase->unexecuted   = '未执行';
 
-$lang->testcase->lblStory       = "相关{$lang->storyCommon}";
+$lang->testcase->lblStory       = "相关{$lang->SRCommon}";
 $lang->testcase->lblLastEdited  = '最后编辑';
 $lang->testcase->lblTypeValue   = '类型可选值列表';
 $lang->testcase->lblStageValue  = '阶段可选值列表';
@@ -209,17 +211,22 @@ $lang->testcase->mustChooseResult = '必须选择评审结果';
 $lang->testcase->noModule         = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->testcase->noCase           = '暂时没有用例。';
 
-$lang->testcase->searchStories = "键入来搜索{$lang->storyCommon}";
+$lang->testcase->searchStories = "键入来搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '请选择库';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');
-$lang->testcase->action->reviewed = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->testcase->action->fromlib               = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');
+$lang->testcase->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = '待评审';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
-$lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->storyCommon}";
+$lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
+$lang->testcase->featureBar['browse']['browseunits'] = '单元测试';
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

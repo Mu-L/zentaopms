@@ -12,6 +12,7 @@
  */
 
 helper::import(dirname(dirname(__FILE__)) . '/base/front/front.class.php');
+
 /**
  * html类，生成html标签。
  * The html class, to build html tags.
@@ -157,7 +158,6 @@ class html extends baseHTML
     {
         $options = (array)($options);
         if($append and !isset($options[$selectedItems])) $options[$selectedItems] = $selectedItems;
-        if(!is_array($options) or empty($options)) return false;
 
         /* The begin. */
         $id = $name;

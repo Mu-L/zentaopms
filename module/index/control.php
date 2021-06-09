@@ -15,7 +15,7 @@ class index extends control
 {
     /**
      * Construct function, load project, product.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -26,23 +26,64 @@ class index extends control
 
     /**
      * The index page of whole zentao system.
-     * 
+     *
+     * @param  string $open
      * @access public
      * @return void
      */
-    public function index()
+    public function index($open = '')
     {
-        $this->locate($this->createLink('my', 'index'));
+        $latestVersionList = array();
+        if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList);
+
+        $this->view->open  = helper::safe64Decode($open);
+        $this->view->title = $this->lang->index->common;
+
+        $this->view->latestVersionList = $latestVersionList;
+        $this->display();
+    }
+
+    /**
+     * Get the log record according to the version.
+     *
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function changeLog($version = '')
+    {
+        $latestVersionList = json_decode($this->config->global->latestVersionList);
+        $version           = $latestVersionList->$version;
+
+        $this->view->version = $version;
+        $this->display();
     }
 
     /**
      * Just test the extension engine.
-     * 
+     *
      * @access public
      * @return void
      */
     public function testext()
     {
         echo $this->fetch('misc', 'getsid');
+    }
+
+    /**
+     * ajaxClearObjectSession
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxClearObjectSession()
+    {
+        $objectType = $this->post->objectType;
+        $appGroup   = zget($this->config->index->appGroup, $objectType, '');
+        if($objectType == 'testcase')    $objectType = 'case';
+        if($objectType == 'testreport')  $objectType = 'report';
+        if($objectType == 'productplan') $objectType = 'productPlan';
+
+        $this->session->set($objectType . 'List', '', $appGroup);
     }
 }

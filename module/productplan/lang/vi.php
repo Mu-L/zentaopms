@@ -19,6 +19,7 @@ $lang->productplan->view       = "Chi tiết kế hoạch";
 $lang->productplan->bugSummary = "Tổng <strong>%s</strong> Bugs trên trang này.";
 $lang->productplan->basicInfo  = 'Thông tin cơ bản';
 $lang->productplan->batchEdit  = 'Sửa hàng loạt';
+$lang->productplan->project    = 'Project';
 
 $lang->productplan->batchUnlink      = "Hủy liên kết hàng loạt";
 $lang->productplan->linkStory        = "Liên kết câu chuyện";
@@ -29,6 +30,7 @@ $lang->productplan->linkedStories    = 'Câu chuyện liên kết';
 $lang->productplan->unlinkedStories  = 'Câu chuyện chưa liên kết';
 $lang->productplan->updateOrder      = 'Sắp xếp';
 $lang->productplan->createChildren   = "Tạo kế hoạch con";
+$lang->productplan->createExecution  = "Create {$lang->executionCommon}";
 
 $lang->productplan->linkBug        = "Liên kết Bug";
 $lang->productplan->unlinkBug      = "Hủy liên kết Bug";
@@ -43,6 +45,8 @@ $lang->productplan->confirmUnlinkStory = "Bạn có muốn hủy liên kết câ
 $lang->productplan->confirmUnlinkBug   = "Bạn có muốn hủy liên kết bug này?";
 $lang->productplan->noPlan             = 'Không có kế hoạch nào';
 $lang->productplan->cannotDeleteParent = 'Không thể xóa kế hoạch mẹ';
+$lang->productplan->selectProjects     = "Please select the project";
+$lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';
 $lang->productplan->product    = $lang->productCommon;
@@ -56,7 +60,7 @@ $lang->productplan->future     = 'TBD';
 $lang->productplan->stories    = 'Câu chuyện';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->project    = $lang->projectCommon;
+$lang->productplan->execution  = $lang->executionCommon;
 $lang->productplan->parent     = "Kế hoạch mẹ";
 $lang->productplan->parentAB   = "Mẹ";
 $lang->productplan->children   = "Kế hoạch con";

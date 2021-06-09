@@ -1,5 +1,5 @@
 $(document).on('click', '.task-toggle', function(e)
-{   
+{
     var $toggle = $(this);
     var id = $(this).data('id');
     var isCollapsed = $toggle.toggleClass('collapsed').hasClass('collapsed');
@@ -19,7 +19,14 @@ $(function()
             $content.append("<a href='###' class='more'><i class='icon icon-chevron-double-down'></i></a>");
         }
     });
-})
+
+    $('#createExecutionButton').on('click', function()
+    {
+        var projectID = $('#project').val();
+        var planID    = $('#planID').val();
+        $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+    });
+});
 $(document).on('click', 'td.content .more', function(e)
 {
     var $toggle = $(this);
@@ -38,3 +45,16 @@ $(document).on('click', 'td.content .more', function(e)
         $toggle.find('i').removeClass('icon-chevron-double-down').addClass('icon-chevron-double-up');
     }
 });
+
+/**
+ * Get planID
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function getPlanID(obj)
+{
+    var planID = $(obj).attr("data-id");
+    $('#planID').val(planID);
+}

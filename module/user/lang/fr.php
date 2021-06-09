@@ -11,6 +11,8 @@
  */
 $lang->user->common           = 'Utilisateur';
 $lang->user->id               = 'ID';
+$lang->user->inside           = 'Inside Members';
+$lang->user->outside          = 'Outside Members';
 $lang->user->company          = 'Entreprise';
 $lang->user->dept             = 'Compartiment';
 $lang->user->account          = 'Compte';
@@ -49,6 +51,11 @@ $lang->user->newPassword      = 'Nouveau Password';
 $lang->user->verifyPassword   = 'Mot de Passe';
 $lang->user->resetPassword    = 'Password oublié ?';
 $lang->user->score            = 'Score';
+$lang->user->name             = 'Name';
+$lang->user->type             = 'User Type';
+$lang->user->cropAvatar       = 'Crop Avatar';
+$lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
+$lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
@@ -76,6 +83,7 @@ $lang->user->asGuest       = "Invité";
 $lang->user->goback        = "Retour";
 $lang->user->deleted       = '(Supprimé)';
 $lang->user->search        = 'Recherche';
+$lang->user->else          = 'Else';
 
 $lang->user->saveTemplate          = 'Sauver comme Modèle';
 $lang->user->setPublic             = 'Définir comme Modèle Public';
@@ -86,17 +94,20 @@ $lang->user->confirmDeleteTemplate = 'Voulez-vous vraiment supprimer ce modèle 
 $lang->user->setPublicTemplate     = 'Définir comme Modèle Public';
 $lang->user->tplContentNotEmpty    = 'Le contenu du modèle ne peut pas être vide !';
 
-$lang->user->profile     = 'Profil';
-$lang->user->project     = $lang->projectCommon . 's';
-$lang->user->task        = 'Tâches';
-$lang->user->bug         = 'Bugs';
-$lang->user->test        = 'Test';
-$lang->user->testTask    = 'Recettes';
-$lang->user->testCase    = 'CasTests';
-$lang->user->schedule    = 'Agenda';
-$lang->user->todo        = 'Todo List';
-$lang->user->story       = 'Stories';
-$lang->user->dynamic     = 'Historique';
+$lang->user->profile   = 'Profil';
+$lang->user->project   = $lang->executionCommon . 's';
+$lang->user->execution = 'Execution';
+$lang->user->task      = 'Tâches';
+$lang->user->bug       = 'Bugs';
+$lang->user->test      = 'Test';
+$lang->user->testTask  = 'Recettes';
+$lang->user->testCase  = 'CasTests';
+$lang->user->issue     = 'Issue';
+$lang->user->risk      = 'Risk';
+$lang->user->schedule  = 'Agenda';
+$lang->user->todo      = 'Todo List';
+$lang->user->story     = 'Stories';
+$lang->user->dynamic   = 'Historique';
 
 $lang->user->openedBy    = 'Créé par %s';
 $lang->user->assignedTo  = 'Assigné à %s';
@@ -135,6 +146,9 @@ $lang->user->genderList['f'] = 'Femme';
 $lang->user->thirdPerson['m'] = 'lui';
 $lang->user->thirdPerson['f'] = 'lui';
 
+$lang->user->typeList['inside']  = $lang->user->inside;
+$lang->user->typeList['outside'] = $lang->user->outside;
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Faible</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Bon</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>Fort</span>";
@@ -142,11 +156,18 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Fort</span>";
 $lang->user->statusList['active'] = 'Actif';
 $lang->user->statusList['delete'] = 'Supprimé';
 
-$lang->user->personalData['createdTodo']  = 'Entrées Agenda Créées';
-$lang->user->personalData['createdStory'] = 'Stories Créées';
-$lang->user->personalData['finishedTask'] = 'Tâches Terminées';
-$lang->user->personalData['resolvedBug']  = 'Bugs Résolus';
-$lang->user->personalData['createdCase']  = 'CasTests Créés';
+$lang->user->personalData['createdTodos']        = 'Todos Created';
+$lang->user->personalData['createdRequirements'] = "Requirements Created";
+$lang->user->personalData['createdStories']      = "Stories Created";
+$lang->user->personalData['finishedTasks']       = 'Tasks Finished';
+$lang->user->personalData['createdBugs']         = 'Bugs Created';
+$lang->user->personalData['resolvedBugs']        = 'Bugs Resolved';
+$lang->user->personalData['createdCases']        = 'Cases Created';
+$lang->user->personalData['createdRisks']        = 'Risks Created';
+$lang->user->personalData['resolvedRisks']       = 'Risks Resolved';
+$lang->user->personalData['createdIssues']       = 'Issues Created';
+$lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
+$lang->user->personalData['createdDocs']         = 'Docs Created';
 
 $lang->user->keepLogin['on']      = 'Rester connecté';
 $lang->user->loginWithDemoUser    = "Se connecté en tant qu'invité :";
@@ -183,6 +204,7 @@ $lang->user->error->dangerPassword = "ID %s，Les mots de passe ne peuvent pas u
 
 $lang->user->error->verifyPassword   = "Vérification en échec. Entrez votre Mot de Passe de Connexion.";
 $lang->user->error->originalPassword = "Ancien Mot de Passe incorrect.";
+$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -192,6 +214,9 @@ $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
 $lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+
+$lang->user->executionTypeList['stage']  = 'Stage';
+$lang->user->executionTypeList['sprint'] = $lang->iterationCommon;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';
@@ -217,5 +242,5 @@ $lang->user->noticeResetFile = "<h5>Contactez l'administrateur pour réinitialis
     <li>Si le fichier existe déjà, supprimez le et créez le à nouveau.</li><li>Bonne chance.</li>
     </ol>";
 $lang->user->notice4Safe = "Warning: Weak password of one click package detected";
-$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
-$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.net/book/zentaopmshelp/467.html' target='_blank'>https://www.zentao.net/book/zentaopmshelp/467.html</a>";
+$lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->process4DB  = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";

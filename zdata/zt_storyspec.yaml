@@ -18,9 +18,13 @@ fields:
     loop: 0
     format: ""
   - field: title
-    note: "标题"
-    range: 1-10000
-    prefix: "这是一个软件需求标题"
+    note: "需求标题"
+    fields:
+      - field: field1
+        range: 用户需求,软件需求
+      - field: field2
+        range: 1-100000
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""

@@ -107,9 +107,6 @@ $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
 $lang->install->workingList['full']      = 'Application Lifecycle Management';
-$lang->install->workingList['onlyTest']  = 'Only Test Management';
-$lang->install->workingList['onlyStory'] = 'Only Story Management';
-$lang->install->workingList['onlyTask']  = 'Only Task Management';
 
 $lang->install->errorConnectDB      = 'Connection to the database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';
@@ -156,7 +153,7 @@ $lang->install->groupList['LIMITED']['name'] = 'Limited User';
 $lang->install->groupList['LIMITED']['desc'] = 'Users can only edit contents related to themselves.';
 
 $lang->install->cronList[''] = 'Monitor Cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn']   = 'Update Burndown Chart';
+$lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Daily Task Reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']               = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']               = 'Synchronize GIT';

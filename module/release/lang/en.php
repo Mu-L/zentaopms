@@ -9,7 +9,7 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->release->common           = 'Release';
+$lang->release->common           = 'Product Release';
 $lang->release->create           = "Create Release";
 $lang->release->edit             = "Edit Release";
 $lang->release->linkStory        = "Link Story";
@@ -35,6 +35,7 @@ $lang->release->basicInfo = 'Basic Info';
 $lang->release->id            = 'ID';
 $lang->release->product       = $lang->productCommon;
 $lang->release->branch        = 'Platform/Branch';
+$lang->release->project       = 'Project';
 $lang->release->build         = 'Build';
 $lang->release->name          = 'Name';
 $lang->release->marker        = 'Milestone';

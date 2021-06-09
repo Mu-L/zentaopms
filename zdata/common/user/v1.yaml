@@ -2,6 +2,7 @@ title: user
 desc: 创建一些默认用户
 author: ly
 version: 1.0
+
 instances:
   - instance: user
     note: 默认用户列表
@@ -31,7 +32,6 @@ instances:
        postfix: ","
      - field: user7
        range: test3
-
   - instance: userC
     note: 前后逗号拼接用户
     fields:
@@ -57,3 +57,4 @@ instances:
      - field: user7
        range: test3
        postfix: ","
+

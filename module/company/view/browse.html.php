@@ -13,6 +13,7 @@
 <?php
 include '../../common/view/header.html.php';
 js::set('deptID', $deptID);
+js::set('browseType', $browseType);
 js::set('confirmDelete', $lang->user->confirmDelete);
 ?>
 <div id='mainMenu' class='clearfix'>
@@ -23,6 +24,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     </div>
   </div>
   <div class='btn-toolbar pull-left'>
+    <?php echo html::a($this->createLink('company', 'browse', 'browseType=inside'), '<span class="text">' . $lang->user->inside . '</span>', '', 'class="btn btn-link inside"');?>
+    <?php echo html::a($this->createLink('company', 'browse', 'browseType=outside'), '<span class="text">' . $lang->user->outside . '</span>', '', 'class="btn btn-link outside"');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -52,13 +55,13 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     </div>
   </div>
   <div class='main-col'>
-    <div class="cell" id="queryBox" data-module='user'></div>
+    <div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module='user'></div>
     <form class='main-table table-user' data-ride='table' action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
       <?php $canBatchEdit = common::hasPriv('user', 'batchEdit');?>
       <table class='table has-sort-head' id='userList'>
         <thead>
         <tr>
-          <?php $vars = "param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+          <?php $vars = "browseType=$browseType&param=$param&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
           <th class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -67,9 +70,13 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th><?php common::printorderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
+          <th><?php common::printOrderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
           <th><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
+          <?php if($browseType == 'inside'):?>
           <th class="w-90px"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
+          <?php else:?>
+          <th class="w-90px"><?php common::printOrderLink('company', $orderBy, $vars, $lang->user->company);?></th>
+          <?php endif;?>
           <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
           <th class="c-type"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
           <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
@@ -84,14 +91,18 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <tr>
           <td class='c-id'>
             <?php if($canBatchEdit):?>
-            <?php echo html::checkbox('users', array($user->account => '')) . html::a(helper::createLink('user', 'view', "userID=$user->id"), sprintf('%03d', $user->id));?>
+            <?php echo html::checkbox('users', array($user->account => '')) . sprintf('%03d', $user->id);?>
             <?php else:?>
             <?php printf('%03d', $user->id);?>
             <?php endif;?>
           </td>
-          <td><?php if(!common::printLink('user', 'view', "userID=$user->id", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
+          <td title="<?php echo $user->realname;?>"><?php echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
+          <?php if($browseType == 'inside'):?>
           <td class="w-90px" title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
+          <?php else:?>
+          <td class="w-90px" title='<?php echo zget($companies, $user->company, '');?>'><?php echo zget($companies, $user->company, '');?></td>
+          <?php endif;?>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
           <td class="c-type"><?php echo zget($lang->user->genderList, $user->gender, $user->gender);?></td>
           <td><?php echo $user->phone;?></td>
@@ -124,5 +135,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     </form>
   </div>
 </div>
-<script lanugage='javascript'>$('#dept<?php echo $deptID;?>').addClass('active');</script>
+<script lanugage='javascript'>
+$('#dept<?php echo $deptID;?>').addClass('active');
+$('.pull-left .' + browseType).addClass('btn-active-text');
+</script>
 <?php include '../../common/view/footer.html.php';?>

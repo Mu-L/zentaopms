@@ -11,7 +11,21 @@
  */
 class testcase extends control
 {
+    /**
+     * All products.
+     *
+     * @var    array
+     * @access public
+     */
     public $products = array();
+
+    /**
+     * Project id.
+     *
+     * @var    int
+     * @access public
+     */
+    public $projectID = 0;
 
     /**
      * Construct function, load product, tree, user auto.
@@ -25,8 +39,28 @@ class testcase extends control
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
-        $this->view->products = $this->products = $this->product->getPairs('nocode');
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testcase")));
+        $this->loadModel('qa');
+
+        /* Get product data. */
+        $objectID = 0;
+        if($this->app->openApp == 'project')
+        {
+            $objectID = $this->session->project;
+            $products  = $this->loadModel('project')->getProducts($objectID, false);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $objectID = $this->session->execution;
+            $products = $this->loadModel('execution')->getProducts($objectID, false);
+        }
+        else
+        {
+            $products = $this->product->getPairs();
+        }
+
+        $this->view->products = $this->products = $products;
+        $openApp = ($this->app->openApp == 'project' or $this->app->openApp == 'execution') ? $this->app->openApp : 'qa';
+        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$openApp&activeMenu=testcase&objectID=$objectID")));
     }
 
     /**
@@ -50,10 +84,11 @@ class testcase extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
 
@@ -61,18 +96,18 @@ class testcase extends control
         $browseType = strtolower($browseType);
 
         /* Set browseType, productID, moduleID and queryID. */
-        $productID = $this->product->saveState($productID, $this->products);
+        $productID = $this->app->openApp != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
         }
-        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot, '', false, false);
-        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot, '', false, true);
+        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
@@ -80,8 +115,17 @@ class testcase extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
-        $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID, $orderBy);
-        $this->session->set('caseList', $this->app->getURI(true));
+        if($this->app->openApp == 'project')
+        {
+            $this->products = array('0' => $this->lang->product->all) + $this->loadModel('project')->getProducts($this->session->project, false);
+            $this->loadModel('project')->setMenu($projectID);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
+
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -97,6 +141,11 @@ class testcase extends control
 
         /* Get test cases. */
         $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        if(empty($cases) and $pageID > 1)
+        {
+            $pager = pager::init(0, $recPerPage, 1);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        }
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $browseType != 'bysearch' ? false : true);
@@ -106,13 +155,26 @@ class testcase extends control
         $cases = $this->testcase->appendData($cases);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
+        $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
+        $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+        $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
         $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+
+        /* Get module tree.*/
+        if($projectID and empty($productID))
+        {
+            $moduleTree = $this->tree->getCaseTreeMenu($projectID, $productID, 0, array('treeModel', 'createCaseLink'));
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        }
 
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
@@ -123,9 +185,10 @@ class testcase extends control
         $this->view->product       = $this->product->getById($productID);
         $this->view->productName   = $this->products[$productID];
         $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createCaseLink'), '', $branch);
+        $this->view->moduleTree    = $moduleTree;
         $this->view->moduleName    = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->moduleID      = $moduleID;
+        $this->view->projectType   = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
         $this->view->summary       = $this->testcase->summary($cases);
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter');
@@ -158,8 +221,14 @@ class testcase extends control
 
         $this->app->loadLang('testtask');
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
-        $this->session->set('caseList', $this->app->getURI(true));
+        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $products = array('0' => $this->lang->product->all) + $this->project->getProducts($this->session->project, false);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
+        }
+
+        $this->session->set('caseList', $this->app->getURI(true), $this->app->openApp);
 
         $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
@@ -177,7 +246,7 @@ class testcase extends control
             }
         }
 
-        $this->app->loadLang('project');
+        $this->app->loadLang('execution');
         $this->app->loadLang('task');
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
@@ -213,7 +282,16 @@ class testcase extends control
      */
     public function create($productID, $branch = '', $moduleID = 0, $from = '', $param = 0, $storyID = 0, $extras = '')
     {
-        $testcaseID = $from == 'testcase' ? $param : 0;
+        if($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
+
+        $testcaseID = ($from and strpos('testcase|work|contribute', $from) !== false) ? $param : 0;
         $bugID      = $from == 'bug' ? $param : 0;
 
         $this->loadModel('story');
@@ -222,7 +300,7 @@ class testcase extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
-            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())
             {
@@ -241,14 +319,17 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
+            if($this->app->openApp == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
+            if($this->app->openApp == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
 
             $this->executeHooks($caseID);
 
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
-            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $response['locate'] = ($this->session->caseList and strpos($this->session->caseList, 'dynamic') === false) ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
@@ -258,7 +339,18 @@ class testcase extends control
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
         /* Set menu. */
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->openApp == 'execution')
+        {
+            $this->loadModel('execution')->setMenu($this->session->execution);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
 
         /* Init vars. */
         $type         = 'feature';
@@ -315,10 +407,10 @@ class testcase extends control
         $position[] = $this->lang->testcase->create;
 
         /* Set story and currentModuleID. */
-        if($storyID and empty($moduleID))
+        if($storyID)
         {
-            $story    = $this->loadModel('story')->getByID($storyID);
-            $moduleID = $story->module;
+            $story = $this->loadModel('story')->getByID($storyID);
+            if(empty($moduleID)) $moduleID = $story->module;
         }
         $currentModuleID = (int)$moduleID;
 
@@ -331,7 +423,12 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false); 
+        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
+        if($this->app->openApp != 'qa')
+        {
+            $projectID = $this->app->openApp == 'project' ? $this->session->project : $this->session->execution;
+            $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch);
+        }
         if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
 
         /* Set custom. */
@@ -377,12 +474,17 @@ class testcase extends control
         $this->loadModel('story');
         if(!empty($_POST))
         {
-            $caseID = $this->testcase->batchCreate($productID, $branch, $storyID);
+            $caseIDList = $this->testcase->batchCreate($productID, $branch, $storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
 
-            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
+            if($this->viewType == 'json') $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
+
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            $currentModule = $this->app->openApp == 'project' ? 'project'  : 'testcase';
+            $currentMethod = $this->app->openApp == 'project' ? 'testcase' : 'browse';
+            $projectParam  = $this->app->openApp == 'project' ? "projectID={$this->session->project}&" : '';
+            die(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -397,7 +499,7 @@ class testcase extends control
         $currentModuleID = (int)$moduleID;
 
         /* Set menu. */
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Set story list. */
         $story     = $storyID ? $this->story->getByID($storyID) : '';
@@ -489,12 +591,13 @@ class testcase extends control
      */
     public function view($caseID, $version = 0, $from = 'testcase', $taskID = 0)
     {
-        $case = $this->testcase->getById($caseID, $version);
+        $caseID = (int)$caseID;
+        $case   = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {
-            $this->lang->testcase->subMenu->testcase->feature['alias'] = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias'] = 'view';
+            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
+            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
             $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
         }
 
@@ -517,13 +620,11 @@ class testcase extends control
             }
         }
 
-        $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->caselib->setLibMenu($libraries, $case->lib);
-            $this->lang->testcase->menu = $this->lang->caselib->menu;
+            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -533,13 +634,20 @@ class testcase extends control
         else
         {
             $productID = $case->product;
-            $this->testcase->setMenu($this->products, $productID, $case->branch);
+            $product   = $this->product->getByID($productID);
+            $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
+
+            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $this->view->title      = "CASE #$case->id $case->title - " . $this->products[$productID];
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
+            $this->view->product     = $product;
+            $this->view->branches    = $branches;
             $this->view->productName = $this->products[$productID];
-            $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $case->branch, '');
+            $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
         $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)
@@ -566,7 +674,6 @@ class testcase extends control
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
-        $this->view->branches   = $branches;
 
         $this->display();
     }
@@ -608,6 +715,14 @@ class testcase extends control
         }
 
         $case = $this->testcase->getById($caseID);
+        if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+        if($case->auto == 'unit')
+        {
+            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
+            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
+            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
+        }
+
         if(empty($case->steps))
         {
             $step = new stdclass();
@@ -621,9 +736,7 @@ class testcase extends control
         if($isLibCase)
         {
             $libraries = $this->loadModel('caselib')->getLibraries();
-            $this->caselib->setLibMenu($libraries, $case->lib);
-            $this->lang->testcase->menu = $this->lang->caselib->menu;
-            if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testcase = 'caselib';
+            $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->caselib->setLibMenu($libraries, $case->lib);
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
@@ -640,7 +753,9 @@ class testcase extends control
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
-            $this->testcase->setMenu($this->products, $productID, $case->branch);
+            if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+            if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+            if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
             if($case->lib and $case->fromCaseID)
@@ -705,20 +820,22 @@ class testcase extends control
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
         $caseIDList = array_unique($caseIDList);
-
-        /* Get the edited cases. */
-        $cases = $this->testcase->getByList($caseIDList);
         $branchProduct = false;
+
+        if($this->app->openApp == 'project')   $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->openApp == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
 
         /* The cases of a product. */
         if($productID)
         {
+            /* Get the edited cases. */
+            $cases = $this->testcase->getByList($caseIDList);
+
             if($type == 'lib')
             {
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
-                $this->caselib->setLibMenu($libraries, $libID);
-                $this->lang->testcase->menu = $this->lang->caselib->menu;
 
                 /* Set modules. */
                 $modules = $this->tree->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0, $branch);
@@ -731,7 +848,6 @@ class testcase extends control
             else
             {
                 $product = $this->product->getByID($productID);
-                $this->testcase->setMenu($this->products, $productID, $branch);
 
                 if($product->type != 'normal') $branchProduct = true;
 
@@ -745,13 +861,21 @@ class testcase extends control
                 $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
             }
         }
-        /* The cases of my. */
         else
         {
-            $this->lang->testcase->menu = $this->lang->my->menu;
-            $this->lang->set('menugroup.testcase', 'my');
-            $this->lang->testcase->menuOrder = $this->lang->my->menuOrder;
+            /* Get the edited cases. */
+            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF($this->app->openApp == 'my')->andWhere('t2.id')->in($caseIDList)->fi()
+                ->beginIF($this->app->openApp != 'my')->andWhere('t1.id')->in($caseIDList)->fi()
+                ->fetchAll('id');
+            $caseIDList = array_keys($cases);
+
+            /* The cases of my. */
             $this->loadModel('my')->setMenu();
+            $this->lang->testcase->menu = $this->lang->my->menu->work;
+            $this->lang->my->menu->work['subModule'] = 'testcase';
 
             $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
             $this->view->title      = $this->lang->testcase->batchEdit;
@@ -774,12 +898,11 @@ class testcase extends control
         // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
 
         /* Judge whether the editedCases is too large and set session. */
-        $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
+        $countInputVars  = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $this->loadModel('story');
-        $stories = $this->story->getProductStoryPairs($productID, $branch);
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
 
         /* Set custom. */
@@ -1179,7 +1302,7 @@ class testcase extends control
 
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->loadModel('product')->getPairs('nocode');
+            $products = $this->loadModel('product')->getPairs();
             $branches = $this->loadModel('branch')->getPairs($productID);
 
             /* Get related objects id lists. */
@@ -1248,7 +1371,7 @@ class testcase extends control
                 $case->stepDesc     = trim($case->stepDesc);
                 $case->stepExpect   = trim($case->stepExpect);
                 $case->real         = trim($case->real);
-                $case->precondition = html_entity_decode($case->precondition, ENT_QUOTES);
+                $case->precondition = htmlspecialchars_decode($case->precondition, ENT_QUOTES);
 
                 if($this->post->fileType == 'csv')
                 {
@@ -1479,13 +1602,13 @@ class testcase extends control
             die(js::reload('parent'));
         }
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->openApp == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))
         {
             echo js::alert($this->lang->testcase->noLibrary);
-            die(js::locate(inlink('browse')));
+            die(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
 
@@ -1505,7 +1628,7 @@ class testcase extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $pager = pager::init(0, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
         $this->view->position[] = $this->lang->testcase->importFromLib;
@@ -1529,10 +1652,10 @@ class testcase extends control
     /**
      * Show import data
      *
-     * @param  int        $productID 
-     * @param  int        $branch 
-     * @param  int        $pagerID 
-     * @param  int        $maxImport 
+     * @param  int        $productID
+     * @param  int        $branch
+     * @param  int        $pagerID
+     * @param  int        $maxImport
      * @param  string|int $insert     0 is covered old, 1 is insert new.
      * @access public
      * @return void
@@ -1549,7 +1672,15 @@ class testcase extends control
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);
-                die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+
+                if($this->app->openApp == 'project')
+                {
+                    die(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
+                }
+                else
+                {
+                    die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+                }
             }
             else
             {
@@ -1557,7 +1688,14 @@ class testcase extends control
             }
         }
 
-        $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->openApp == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        else
+        {
+            $this->testcase->setMenu($this->products, $productID, $branch);
+        }
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
@@ -1644,8 +1782,8 @@ class testcase extends control
 
                         foreach($steps as $step)
                         {
-                            $step = trim($step);
-                            if(empty($step)) continue;
+                            $trimedStep = trim($step);
+                            if(empty($trimedStep)) continue;
                             if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
                             {
                                 $num     = $out[1];
@@ -1772,7 +1910,7 @@ class testcase extends control
     }
 
     /**
-     * Export case getModuleByStory 
+     * Export case getModuleByStory
      *
      * @params int $storyID
      * @return void
@@ -1780,7 +1918,7 @@ class testcase extends control
     public function ajaxGetStoryModule($storyID)
     {
         $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
-        $moduleID = !empty($story) ? $story->module : 0; 
+        $moduleID = !empty($story) ? $story->module : 0;
         die(json_encode(array('moduleID'=> $moduleID)));
     }
 
