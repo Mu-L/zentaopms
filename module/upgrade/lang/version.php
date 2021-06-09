@@ -131,12 +131,9 @@ $lang->upgrade->fromVersions['12_4_3']     = '12.4.3';
 $lang->upgrade->fromVersions['12_4_4']     = '12.4.4';
 $lang->upgrade->fromVersions['12_5']       = '12.5';
 $lang->upgrade->fromVersions['12_5_1']     = '12.5.1';
-<<<<<<< HEAD
-=======
 $lang->upgrade->fromVersions['12_5_2']     = '12.5.2';
 $lang->upgrade->fromVersions['12_5_3']     = '12.5.3';
 $lang->upgrade->fromVersions['15_0_rc1']   = '15.0.rc1';
 $lang->upgrade->fromVersions['15_0_rc2']   = '15.0.rc2';
 $lang->upgrade->fromVersions['15_0_rc3']   = '15.0.rc3';
 $lang->upgrade->fromVersions['15_0']       = '15.0';
->>>>>>> 3fe8523aba4206f083d48c90b406edee6a1e2dae
