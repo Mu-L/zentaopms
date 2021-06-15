@@ -694,6 +694,34 @@ class my extends control
         $this->display();
     }
 
+    public function myMeeting($browseType = 'futureMeeting', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('meeting');
+
+        $uri = $this->app->getURI(true);
+        $this->session->set('meetingList', $uri, 'my');
+
+        $meetings = $this->meeting->getListByUser($browseType, $orderBy);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($meetings);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $meetings = array_chunk($meetings, $pager->recPerPage);
+
+
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->meeting;
+        $this->view->browseType = $browseType;
+        $this->view->meetings   = empty($meetings) ? $meetings : $meetings[$pageID - 1];
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
+        $this->view->mode       = 'myMeeting';
+
+        $this->display();
+    }
+
     /**
      * My team.
      *
