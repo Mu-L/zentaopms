@@ -200,7 +200,7 @@ $lang->story->reasonList['bydesign']   = 'As Designed';
 $lang->story->reviewResultList['']        = '';
 $lang->story->reviewResultList['pass']    = 'Pass';
 $lang->story->reviewResultList['revert']  = 'Revert';
-$lang->story->reviewResultList['clarify'] = 'To Be Clarified';
+$lang->story->reviewResultList['clarify'] = 'Clarify';
 $lang->story->reviewResultList['reject']  = 'Reject';
 
 $lang->story->reviewList[0] = 'No';
@@ -217,7 +217,7 @@ $lang->story->sourceList['support']    = 'Technical Support';
 $lang->story->sourceList['competitor'] = 'Competitor';
 $lang->story->sourceList['partner']    = 'Partner';
 $lang->story->sourceList['dev']        = 'Dev Team';
-$lang->story->sourceList['tester']     = 'QA Team';
+$lang->story->sourceList['tester']     = 'Test Team';
 $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['forum']      = 'Forum';
 $lang->story->sourceList['other']      = 'Others';
@@ -259,7 +259,7 @@ $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'Cases';
 
 $lang->story->specTemplate         = "As a < type of user >, I want < some goal > so that < some reason >.";
-$lang->story->needNotReview        = 'No Review Required';
+$lang->story->needNotReview        = 'No Review';
 $lang->story->successSaved         = "Story is saved!";
 $lang->story->confirmDelete        = "Do you want to delete this story?";
 $lang->story->errorEmptyChildStory = '『Decomposed Stories』canot be blank.';
