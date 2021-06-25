@@ -9,12 +9,12 @@
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->upgrade->common          = 'Update';
+$lang->upgrade->common          = 'Upgrade';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Result';
 $lang->upgrade->fail            = 'Failed';
 $lang->upgrade->successTip      = 'Successed';
-$lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations!</p><p>Your ZenTao is updated.</p>";
+$lang->upgrade->success         = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations!</p><p>Your ZenTao is upgraded.</p>";
 $lang->upgrade->tohome          = 'Visit ZenTao';
 $lang->upgrade->license         = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning        = 'Warning!';
@@ -50,43 +50,43 @@ $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
 $lang->upgrade->updateFile    = 'File information has to be updated.';
 $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you delete it.';
-$lang->upgrade->mergeProgram  = 'Data Merge';
+$lang->upgrade->afterDeleted  = 'The file is not deleted. Please refresh after you delete it.';
+$lang->upgrade->mergeProgram  = 'Data Merging';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0.beta1 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10.0.rc1 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5.0.rc1 upgrade';
-$lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15.0 upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao Pro version 10.0 upgrade';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao Biz version 5.0 upgrade';
+$lang->upgrade->toMAXGuide    = 'ZenTao Max version upgrade';
 $lang->upgrade->to15Desc      = <<<EOD
-<p>Dear users, ZenTao has made adjustments to navigation and concepts since version 15. The main changes are as follows:</p>
+<p>ZenTao navigation and concepts are modified since version 15.0. The changes are as follows:</p>
 <ol>
-<p><li>Added the concept of program. A program set can include multiple products and multiple projects.</li></p>
-<p><li>Subdivided the concept of project and iteration, a project can contain multiple iterations.</li></p>
-<p><li>The navigation adds a left menu and supports multi-page operations.</li></p>
+<p><li>Added the concept of program. A program can have multiple products and projects.</li></p>
+<p><li>Subdivided the concept of project and iteration. A project can have multiple iterations.</li></p>
+<p><li>The navigation has a menu on the left and supports multi-page operations.</li></p>
 </ol>
 <br/>
-<p>You can experience the latest version of the function online to decide whether to enable the mode: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>Demo</a></p>
+<p>You can try the latest features online and then decide whether to enable the mode: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>Demo</a></p>
 </br>
-<p><strong>How do you plan to use the new version of ZenTao?</strong></p>
+<p><strong>Give it a try, the new feature/concepts in ZenTao!</strong></p>
 EOD;
 
 $lang->upgrade->mergeProgramDesc = <<<EOD
-<p>Next, we will migrate the previous historical product and iteration data to the project set and under the project, with the following scenario for migration.</p><br />
-<h4>Option 1: Product and iteration organized by product line </h4>
-<p>It is possible to migrate the entire product line and its following products and iterations into one project set and project, although you can also migrate them separately as needed.</p>
+<p>Next, we will migrate the previous product and iteration to a Program and Projects under it, with the following scenario for migration.</p><br />
+<h4>Option 1: Product and iteration organized by productlines </h4>
+<p>It is possible to migrate the entire productline and its products and iterations to one program and its projects, although you can also migrate them separately as needed.</p>
 <h4>Option 2: Iteration of product-based organizations </h4>
-<p>You can select multiple products and the iterations below them to migrate to a project set and project, or you can select a particular product and the iterations below it to migrate to a project set and project.</p>
+<p>You can select multiple products and the iterations under them to migrate to a program and its projects, or you can select a particular product and the iterations under it to migrate to a program and its projects.</p>
 <h4>Option 3: Independent iterations </h4>
-<p>Several iterations can be selected to migrate to a single project set, or independently.</p>
+<p>Several iterations can be selected to migrate to one program, or independently.</p>
 <h4>Option 4: Iterations linked to multiple products.</h4>
-<p>These iterations can be selected to fall under a new project.</p>
+<p>These iterations can be selected to included in a new project.</p>
 EOD;
 
-$lang->upgrade->to15Mode['classic'] = 'Keep the old version';
-$lang->upgrade->to15Mode['new']     = 'New program management mode';
+$lang->upgrade->to15Mode['classic'] = 'Keep the older version';
+$lang->upgrade->to15Mode['new']     = 'Try the new program  mode';
 
-$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program set management mode in the background-Customize in the future.';
-$lang->upgrade->selectedModeTips['new']     = 'Switching to the program management mode requires merging the previous data, and the system will guide you to complete this operation.';
+$lang->upgrade->selectedModeTips['classic'] = 'You can also switch to the new program mode in the background-Customize later.';
+$lang->upgrade->selectedModeTips['new']     = 'Switching to the program mode requires data merging, and ZenTao will guide you through it.';
 
 $lang->upgrade->line         = 'Product Line';
 $lang->upgrade->program      = 'Merge Project';
@@ -100,12 +100,12 @@ $lang->upgrade->mergeRepo    = 'Merge Repo';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
-$lang->upgrade->mergeSummary       = "Dear users, there are %s products and %s iterations in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
-$lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED iterations: Consolidate the entire product line and the products and iterations below it into one large project.";
-$lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select multiple products and their lower iterations to merge into a large project, or you can select a product to merge its lower iterations into a larger project";
-$lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one large project, or merge them independently";
-$lang->upgrade->mergeByMoreLink    = "Iteration that relates multiple products: select which product the iteration belongs to.";
-$lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
-$lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
+$lang->upgrade->mergeSummary       = "There are %s products and %s iterations in your ZenTao system waiting for merging. Your migration plan is recommended based on the data in ZenTao below, and you can also change it according to your situation:";
+$lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED iterations: Consolidate the entire product line and the products and iterations below it into one program.";
+$lang->upgrade->mergeByProduct     = "PRODUCT-BASED iterations: You can select multiple products and their iterations to merge into a program, or you can select a product to merge its iterations into a program.";
+$lang->upgrade->mergeByProject     = "Independent iterations: You can select several iterations and merge them into one program, or merge them independently";
+$lang->upgrade->mergeByMoreLink    = "Iteration lined to multiple products: select the product that the iteration belongs to.";
+$lang->upgrade->mergeRepoTips      = "Merge the selected repository under the selected product.";
+$lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. You need to create an index. Please go [Admin->System->BuildIndex] page to build index.';
 
 include dirname(__FILE__) . '/version.php';
