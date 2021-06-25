@@ -113,7 +113,18 @@ class project extends control
         /* Sort project. */
         $programs        = array();
         $orderedProjects = array();
-        $objects         = $this->program->getList('all', 'order_asc', null, true);
+
+        $objects =  $this->dao->select('*')->from(TABLE_PROGRAM)
+            ->where('type')->in('program,project')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)
+            ->andWhere('(id')->in($this->app->user->view->programs)
+            ->orWhere('id')->in($this->app->user->view->projects)
+            ->markRight(1)
+            ->fi()
+            ->orderBy('id_asc')
+            ->fetchAll('id');
+
         foreach($objects as $objectID => $object)
         {
             if($object->type == 'program')
@@ -1113,7 +1124,7 @@ class project extends control
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->currentMembers = $this->project->getTeamMembers($projectID);;
+        $this->view->currentMembers = $this->project->getTeamMembers($projectID);
         $this->display();
     }
 

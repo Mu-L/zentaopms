@@ -694,6 +694,17 @@ class my extends control
         $this->display();
     }
 
+    /**
+     * My meeting list.
+     *
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
     public function myMeeting($browseType = 'futureMeeting', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('meeting');
@@ -706,7 +717,7 @@ class my extends control
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->meeting;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
         $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, 0, $pager);
         $this->view->orderBy    = $orderBy;
@@ -1010,6 +1021,9 @@ class my extends control
         $this->session->set('riskList',        $uri, 'project');
         $this->session->set('issueList',       $uri, 'project');
         $this->session->set('stakeholderList', $uri, 'project');
+        $this->session->set('meetingroomList', $uri, 'admin');
+        $this->session->set('meetingList',     $uri, 'project');
+        $this->session->set('meetingList',     $uri, 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
