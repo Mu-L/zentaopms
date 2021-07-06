@@ -157,7 +157,7 @@ $lang->program->list      = 'Program List';
 $lang->execution->list    = "{$lang->executionCommon} List";
 
 $lang->personnel->common     = 'Member';
-$lang->personnel->invest     = 'Investment';
+$lang->personnel->invest     = 'Input';
 $lang->personnel->accessible = 'Accessible';
 
 $lang->stakeholder->common = 'Stakeholder';

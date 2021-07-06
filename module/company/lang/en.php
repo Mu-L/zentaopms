@@ -15,7 +15,7 @@ $lang->company->create   = "Add Company";
 $lang->company->edit     = "Edit Company";
 $lang->company->view     = "Company Information";
 $lang->company->browse   = "User List";
-$lang->company->dynamic  = "Dynamics";
+$lang->company->dynamic  = "Dynamic";
 $lang->company->orgView  = 'View';
 
 $lang->company->name     = 'Company Name';

@@ -11,7 +11,7 @@
  */
 $lang->product->index           = $lang->productCommon . ' Home';
 $lang->product->browse          = 'Story List';
-$lang->product->dynamic         = 'Dynamics';
+$lang->product->dynamic         = 'Dynamic';
 $lang->product->view            = "{$lang->productCommon} Detail";
 $lang->product->edit            = "Edit {$lang->productCommon}";
 $lang->product->batchEdit       = 'Batch Edit';
@@ -101,7 +101,7 @@ $lang->product->qa             = 'Test';
 $lang->product->release        = 'Release';
 $lang->product->allRelease     = 'All Releases';
 $lang->product->maintain       = 'Maintenance';
-$lang->product->latestDynamic  = 'Dynamics';
+$lang->product->latestDynamic  = 'Dynamic';
 $lang->product->plan           = 'Plan';
 $lang->product->iteration      = 'Iterations';
 $lang->product->iterationInfo  = '%s Iteration';

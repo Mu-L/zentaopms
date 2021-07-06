@@ -18,8 +18,8 @@ $lang->block->grid       = 'Position';
 $lang->block->color      = 'Color';
 $lang->block->reset      = 'Reset Layout';
 $lang->block->story      = 'Story';
-$lang->block->investment = 'Investment';
-$lang->block->estimate   = 'Estimate';
+$lang->block->investment = 'Input';
+$lang->block->estimate   = 'Estimates';
 $lang->block->last       = 'Last';
 
 $lang->block->account = 'Account';
@@ -35,13 +35,13 @@ $lang->block->lblModule    = 'Module';
 $lang->block->lblBlock     = 'Block';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
-$lang->block->dynamic      = 'Dynamics';
+$lang->block->dynamic      = 'Dynamic';
 $lang->block->assignToMe   = 'Todo';
 $lang->block->done         = 'Done';
 $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Test Request Detail';
-$lang->block->contribute   = 'Personal Contribution';
+$lang->block->contribute   = 'Contribution';
 
 $lang->block->leftToday           = 'Remained Work';
 $lang->block->myTask              = 'My Tasks';
@@ -65,7 +65,7 @@ $lang->block->createdIssues       = 'Issues Created';
 $lang->block->resolvedIssues      = 'Issues Resolved';
 $lang->block->createdDocs         = 'Docs Created';
 $lang->block->allExecutions       = 'All ' . $lang->executionCommon;
-$lang->block->doingExecution      = 'Doning ' . $lang->executionCommon;
+$lang->block->doingExecution      = 'Doing ' . $lang->executionCommon;
 $lang->block->finishExecution     = 'Finish ' . $lang->executionCommon;
 $lang->block->estimatedHours      = 'Estimated Hours';
 $lang->block->consumedHours       = 'Consumed Hours';
@@ -98,7 +98,7 @@ $lang->block->totalStory   = 'The Total ' . $lang->SRCommon;
 $lang->block->totalBug     = 'The Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
-$lang->block->totalInvestment = 'Total investment';
+$lang->block->totalInvestment = 'Total Input';
 $lang->block->totalPeople     = 'Total number';
 $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
@@ -287,14 +287,14 @@ $lang->block->default['full']['my']['3']['params']['count'] = '20';
 
 if($config->systemMode == 'new')
 {
-    $lang->block->default['full']['my']['4']['title']           = 'Project Statistic';
+    $lang->block->default['full']['my']['4']['title']           = 'Project Data';
     $lang->block->default['full']['my']['4']['block']           = 'statistic';
     $lang->block->default['full']['my']['4']['source']          = 'project';
     $lang->block->default['full']['my']['4']['grid']            = 8;
     $lang->block->default['full']['my']['4']['params']['count'] = '20';
 }
 
-$lang->block->default['full']['my']['5']['title']  = 'Personal Contribution';
+$lang->block->default['full']['my']['5']['title']  = 'My Contribution';
 $lang->block->default['full']['my']['5']['block']  = 'contribute';
 $lang->block->default['full']['my']['5']['source'] = '';
 $lang->block->default['full']['my']['5']['grid']   = 4;
@@ -319,7 +319,7 @@ $lang->block->default['full']['my']['7']['params']['meetingNum'] = '20';
 
 if($config->systemMode == 'new')
 {
-    $lang->block->default['full']['my']['8']['title']  = 'Human Input';
+    $lang->block->default['full']['my']['8']['title']  = 'Man Input';
     $lang->block->default['full']['my']['8']['block']  = 'projectteam';
     $lang->block->default['full']['my']['8']['source'] = 'project';
     $lang->block->default['full']['my']['8']['grid']   = 8;
@@ -343,7 +343,7 @@ $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'My schedule';
+$lang->block->availableBlocks->todo      = 'My Schedule';
 $lang->block->availableBlocks->task      = 'My Tasks';
 $lang->block->availableBlocks->bug       = 'My Bugs';
 $lang->block->availableBlocks->case      = 'My Cases';
@@ -368,8 +368,8 @@ $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = 'Project List';
 $lang->block->modules['project']->availableBlocks->recentproject = 'Recent Project';
-$lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-$lang->block->modules['project']->availableBlocks->projectteam   = 'Project Human Input';
+$lang->block->modules['project']->availableBlocks->statistic     = 'Project Data';
+$lang->block->modules['project']->availableBlocks->projectteam   = 'Project Man Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
@@ -382,7 +382,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dyna
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = 'Project Weekly';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = 'Estimate';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = 'Estimates';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = 'Plan Gantt Chart';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = 'Progress Chart';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = 'Project Issue';
@@ -478,9 +478,9 @@ $lang->block->todoNum    = 'Todo';
 $lang->block->taskNum    = 'Task';
 $lang->block->bugNum     = 'Bug';
 $lang->block->riskNum    = 'Risk';
-$lang->block->issueNum   = 'Issues';
-$lang->block->storyNum   = 'Stories';
-$lang->block->meetingNum = 'Meetings';
+$lang->block->issueNum   = 'Issue';
+$lang->block->storyNum   = 'Story';
+$lang->block->meetingNum = 'Meeting';
 
 $lang->block->typeList = new stdclass();
 
@@ -563,10 +563,10 @@ $lang->block->modules['common']                        = new stdclass();
 $lang->block->modules['common']->moreLinkList          = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
-$lang->block->welcomeList['06:00'] = 'Good morning, %s';
-$lang->block->welcomeList['11:30'] = 'Good day, %s';
-$lang->block->welcomeList['13:30'] = 'Good afternoon, %s';
-$lang->block->welcomeList['19:00'] = 'Good evening, %s';
+$lang->block->welcomeList['06:00'] = 'Good morning, %s!';
+$lang->block->welcomeList['11:30'] = 'Good day, %s!';
+$lang->block->welcomeList['13:30'] = 'Good afternoon, %s!';
+$lang->block->welcomeList['19:00'] = 'Good evening, %s!';
 
 $lang->block->gridOptions[8] = 'Left';
 $lang->block->gridOptions[4] = 'Right';
