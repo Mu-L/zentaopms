@@ -32,6 +32,7 @@ class storyModel extends model
         $story->title  = isset($spec->title)  ? $spec->title  : '';
         $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
+        if(!empty($story->fromStory)) $story->sourceName = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($story->fromStory)->fetch('title');
 
         /* Check parent story. */
         if($story->parent > 0) $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
@@ -808,22 +809,25 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            $_POST['reviewer']   = array_filter($_POST['reviewer']);
-            $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
-            $oldStory->reviewers = implode(',', array_keys($oldReviewer));
-            $story->reviewers    = implode(',', $_POST['reviewer']);
-
-            /* Update story reviewer. */
-            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
-            foreach($_POST['reviewer'] as $reviewer)
+            if(isset($_POST['reviewer']))
             {
-                if(in_array($reviewer, array_keys($oldReviewer))) continue;
+                $_POST['reviewer']   = array_filter($_POST['reviewer']);
+                $oldReviewer         = $this->getReviewerPairs($storyID, $oldStory->version);
+                $oldStory->reviewers = implode(',', array_keys($oldReviewer));
+                $story->reviewers    = implode(',', $_POST['reviewer']);
 
-                $reviewData = new stdclass();
-                $reviewData->story    = $storyID;
-                $reviewData->version  = $oldStory->version;
-                $reviewData->reviewer = $reviewer;
-                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                /* Update story reviewer. */
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->andWhere('reviewer')->notin(implode(',', $_POST['reviewer']))->exec();
+                foreach($_POST['reviewer'] as $reviewer)
+                {
+                    if(in_array($reviewer, array_keys($oldReviewer))) continue;
+
+                    $reviewData = new stdclass();
+                    $reviewData->story    = $storyID;
+                    $reviewData->version  = $oldStory->version;
+                    $reviewData->reviewer = $reviewer;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
             }
 
             unset($oldStory->parent);
@@ -3210,8 +3214,8 @@ class storyModel extends model
      */
     public function getSubject($story)
     {
-        $productName = $this->loadModel('product')->getById($story->product)->name;
-        return 'STORY #' . $story->id . ' ' . $story->title . ' - ' . $productName;
+        $productName = empty($story->product) ? '' : ' - ' . $this->loadModel('product')->getById($story->product)->name;
+        return 'STORY #' . $story->id . ' ' . $story->title . $productName;
     }
 
     /**

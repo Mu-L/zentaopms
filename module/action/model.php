@@ -422,7 +422,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('caselib', 'browse') ? html::a(helper::createLink('caselib', 'browse', "libID=$action->extra"), $name) : $name;
             }
-            elseif($actionName == 'importfromlib')
+            elseif(strpos('importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib', $actionName)!== false)
             {
                 $name = $this->dao->select('name')->from(TABLE_ASSETLIB)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('assetlib', $action->objectType) ? html::a(helper::createLink('assetlib', $action->objectType, "libID=$action->extra"), $name) : $name;
@@ -646,6 +646,10 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
+            elseif(isset($this->config->maxVersion) and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            {
+                $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
+            }
             elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
             {
                 $desc = $this->lang->$objectType->action->$actionType;
@@ -759,7 +763,7 @@ class actionModel extends model
         if(is_numeric($projectID)) $executions = $this->loadModel('execution')->getPairs($projectID);
 
         $this->loadModel('doc');
-        $libs = $this->doc->getLibs('includeDeleted');
+        $libs = $this->doc->getLibs('includeDeleted') + array('' => '');
         $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
 
         $actionCondition = $this->getActionCondition();
@@ -783,7 +787,7 @@ class actionModel extends model
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
-            ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc', '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
+            ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc' || (objectType = 'doc' && (action = 'approved' || action = 'removed')), '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
@@ -942,6 +946,9 @@ class actionModel extends model
             $field     = $this->config->action->objectNameFields[$objectType];
             if($table != TABLE_TODO)
             {
+                $objectName    = array();
+                $objectProject = array();
+
                 if(strpos($this->config->action->needGetProjectType, $objectType) !== false)
                 {
                     $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIds)->fetchAll();
@@ -1035,6 +1042,11 @@ class actionModel extends model
                 if(!is_array($objectLabel)) $action->objectLabel = $objectLabel;
                 if(is_array($objectLabel) and isset($objectLabel[$actionType])) $action->objectLabel = $objectLabel[$actionType];
             }
+            if(isset($this->config->maxVersion) and $action->objectType == 'assetlib')
+            {
+                $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($action->objectID)->fetch('type');
+                if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $action->objectLabel = $this->lang->action->label->{$libType . 'assetlib'};
+            }
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited')
@@ -1057,9 +1069,21 @@ class actionModel extends model
                     continue;
                 }
 
-                if($action->objectType == 'story' and strpos('import2storylib,passapproved', $action->action) !== false)
+                if(isset($this->config->maxVersion)
+                   and strpos($this->config->action->assetType, $action->objectType) !== false
+                   and empty($action->project) and empty($action->product) and empty($action->execution))
                 {
-                    $action->objectLink = helper::createLink('assetlib', 'storyView', sprintf($vars, $action->objectID), '', '', $projectID);
+                    if($action->objectType == 'doc')
+                    {
+                        $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
+                        $method = $assetLibType == 'practice'  ? 'practiceView' : 'componentView';
+                    }
+                    else
+                    {
+                        $method = $this->config->action->assetViewMethod[$action->objectType];
+                    }
+
+                    $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID), '', '', $projectID);
                 }
                 else
                 {

@@ -417,6 +417,23 @@ class docModel extends model
     }
 
     /**
+     * Get docs info by id list.
+     *
+     * @param  array    $docIdList
+     * @access public
+     * @return array
+     */
+    public function getByIdList($docIdList = array())
+    {
+        return $this->dao->select('*,t1.id as docID,t1.type as docType,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
+            ->where('t1.id')->in($docIdList)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+    }
+
+    /**
      * Create a doc.
      *
      * @access public
@@ -511,6 +528,8 @@ class docModel extends model
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('users', '')
             ->setDefault('groups', '')
+            ->setDefault('product', 0)
+            ->setDefault('execution', 0)
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
             ->cleanInt('module')
@@ -520,7 +539,7 @@ class docModel extends model
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
         if($doc->contentType == 'markdown') $doc->content = $this->post->content;
-        if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
+        if(!empty($doc->acl) and $doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
         if($oldDocContent)
@@ -533,10 +552,14 @@ class docModel extends model
             if($oldDocContent->type == 'markdown') $doc->content = str_replace('&gt;', '>', $doc->content);
         }
 
-        $lib = $this->getLibByID($doc->lib);
+        $lib = !empty($doc->lib) ? $this->getLibByID($doc->lib) : '';
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
-        $doc->product   = $lib->product;
-        $doc->execution = $lib->execution;
+        if(!empty($lib))
+        {
+            $doc->product   = $lib->product;
+            $doc->execution = $lib->execution;
+        }
+
         if(isset($doc->type) and $doc->type == 'url') $doc->content = $doc->url;
         unset($doc->url);
 
